@@ -2,6 +2,24 @@
    JOB PAGES STYLES (Lowongan, Detail, Lamar)
    =============================================== */
 
+/* ===== LOGO IMAGE STYLES ===== */
+.logo-img {
+    height: 40px;
+    width: auto;
+    object-fit: contain;
+    filter: drop-shadow(0 0 10px rgba(212, 175, 55, 0.3));
+    transition: var(--transition-normal);
+}
+
+.logo:hover .logo-img {
+    filter: drop-shadow(0 0 15px rgba(212, 175, 55, 0.5));
+    transform: scale(1.05);
+}
+
+.footer-brand .logo-img {
+    height: 50px;
+}
+
 /* ===== PAGE HERO (for Lowongan page) ===== */
 .page-hero {
     position: relative;
