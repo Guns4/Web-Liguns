@@ -1,389 +1,245 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="id">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description"
-        content="Lowongan Kerja Liguns Entertainment - Karaoke LC, Spa Therapist, dan posisi premium lainnya. Income harian, fasilitas lengkap.">
-    <title>Lowongan Kerja - Liguns Entertainment</title>
-
-    <!-- Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap"
-        rel="stylesheet">
-
-    <!-- CSS -->
-    <link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Liguns Entertainment | Agency Profesional Bandung</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Vollkorn:wght@400;500;600&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/common.css">
+  <link rel="stylesheet" href="assets/css/lowongan.css">
+  <link rel="stylesheet" href="assets/css/premium-enhancements.css">
 </head>
 
-<body>
+<body class="fade-page">
 
-    <!-- Navbar -->
-    <nav class="navbar" id="navbar">
-        <div class="container nav-container">
-            <a href="index.html" class="logo">
-                <img src="logo.png" alt="Liguns Entertainment" class="logo-img">
-                <span class="logo-text">Liguns Entertainment</span>
-            </a>
-            <ul class="nav-links">
-                <li><a href="index.html">Beranda</a></li>
-                <li><a href="lowongan.html" class="active">Lowongan Kerja</a></li>
-                <li><a href="index.html#fasilitas">Fasilitas</a></li>
-                <li><a href="lamar.html">Lamar</a></li>
-                <li><a href="index.html#faq">FAQ</a></li>
-            </ul>
-            <a href="https://wa.me/6289669094929?text=Halo%20Liguns%20Entertainment,%20saya%20tertarik%20untuk%20bergabung"
-                target="_blank" class="cta-button">
-                Lamar Sekarang
-            </a>
+  <!-- ===== Header ===== -->
+  <header>
+    <div class="header-container">
+      <div class="logo">
+        <a href="index.html"><img src="assets/img/Logo Liguns.png" alt="Liguns Entertainment"></a>
+      </div>
+      
+      <div class="header-right">
+      <nav id="navbar">
+        <ul>
+          <li><a href="index.html">Beranda</a></li>
+          <li><a href="lowongan.html">Lowongan Kerja</a></li>
+          <li><a href="layanan.html">Layanan</a></li>
+          <li><a href="tentang.html">Tentang</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+
+  
+  <!-- ===== LOWONGAN SECTION ===== -->
+  <section class="lowongan-section">
+    <div class="lowongan-header">
+      <h1>Lowongan Kerja Tersedia</h1>
+      <p class="lowongan-subtitle">Bergabunglah dengan tim profesional kami di berbagai kota di Indonesia</p>
+    </div>
+
+    <!-- ===== SEARCH & FILTER ===== -->
+    <div class="lowongan-controls">
+      <div class="search-box">
+        <input type="text" id="searchInput" placeholder="Cari lowongan atau kota..." class="search-input">
+        <span class="search-icon">🔍</span>
+      </div>
+
+      <div class="filter-container">
+        <button class="filter-btn active" data-filter="all">Semua</button>
+        <button class="filter-btn" data-filter="bandung">Bandung</button>
+        <button class="filter-btn" data-filter="jakarta">Jakarta</button>
+        <button class="filter-btn" data-filter="surabaya">Surabaya</button>
+        <button class="filter-btn" data-filter="lainnya">Kota Lainnya</button>
+      </div>
+    </div>
+
+    <!-- ===== LOWONGAN GRID ===== -->
+    <div class="lowongan-grid" id="lowonganGrid">
+      <!-- BANDUNG REGION -->
+      <div class="lowongan-card" data-city="bandung" data-name="Venetian Havana">
+        <div class="card-badge">Featured</div>
+        <div class="card-image">
+          <img src="assets/img/Logo/VENETIAN.png" alt="Venetian Havana">
+          <div class="overlay"><a href="Venetian.html" class="view-btn">Lihat Detail</a></div>
         </div>
-    </nav>
-
-    <!-- Page Header -->
-    <section class="page-header">
-        <div class="page-header-bg">
-            <div class="hero-gradient"></div>
-            <div class="hero-pattern"></div>
+        <div class="card-content">
+          <h3>Venetian Havana</h3>
+          <p class="card-city">📍 Kota Bandung</p>
+          <p class="card-posisi">Terapis Spa</p>
         </div>
-        <div class="container">
-            <div class="page-header-content">
-                <div class="hero-badge fade-in">
-                    <span class="badge-icon">💼</span>
-                    Karir Premium
-                </div>
-                <h1 class="page-title fade-in">
-                    Lowongan <span class="gradient-text">Kerja</span>
-                </h1>
-                <p class="page-subtitle fade-in">
-                    Temukan peluang karir terbaik dengan income menarik dan fasilitas premium
-                </p>
-            </div>
+      </div>
+
+      <div class="lowongan-card" data-city="bandung" data-name="Denver Club">
+        <div class="card-image">
+          <img src="assets/img/Logo/DENVER.png" alt="Denver Club">
+          <div class="overlay"><a href="Denverclub.html" class="view-btn">Lihat Detail</a></div>
         </div>
-    </section>
-
-    <!-- Job Listings -->
-    <section class="job-listings">
-        <div class="container">
-            <!-- Filter Bar -->
-            <div class="filter-bar scroll-fade">
-                <div class="filter-group">
-                    <label>Kategori:</label>
-                    <select id="categoryFilter" class="filter-select">
-                        <option value="all">Semua Kategori</option>
-                        <option value="karaoke">Karaoke</option>
-                        <option value="spa">Spa & Wellness</option>
-                        <option value="hospitality">Hospitality</option>
-                    </select>
-                </div>
-                <div class="filter-group">
-                    <label>Lokasi:</label>
-                    <select id="locationFilter" class="filter-select">
-                        <option value="all">Semua Lokasi</option>
-                        <option value="bandung">Bandung</option>
-                        <option value="jakarta">Jakarta</option>
-                    </select>
-                </div>
-                <div class="search-group">
-                    <input type="text" id="searchInput" class="search-input" placeholder="Cari lowongan...">
-                    <svg class="search-icon" width="20" height="20" viewBox="0 0 24 24" fill="none"
-                        stroke="currentColor" stroke-width="2">
-                        <circle cx="11" cy="11" r="8"></circle>
-                        <path d="M21 21l-4.35-4.35"></path>
-                    </svg>
-                </div>
-            </div>
-
-            <!-- Jobs Grid -->
-            <div class="jobs-grid" id="jobsGrid">
-                <!-- Job Card 1 - Featured -->
-                <div class="job-card featured scroll-fade" data-category="karaoke" data-location="bandung">
-                    <div class="job-card-header">
-                        <div class="job-badges">
-                            <span class="badge badge-featured">⭐ Featured</span>
-                            <span class="badge badge-category">Karaoke</span>
-                        </div>
-                        <div class="job-salary">
-                            <span class="salary-amount">Rp 400rb - 550rb</span>
-                            <span class="salary-per">per voucher</span>
-                        </div>
-                    </div>
-                    <div class="job-card-body">
-                        <h3 class="job-title">LC Karaoke</h3>
-                        <div class="job-meta">
-                            <div class="meta-item">
-                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                    stroke-width="2">
-                                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
-                                    <circle cx="12" cy="10" r="3"></circle>
-                                </svg>
-                                <span>Bandung</span>
-                            </div>
-                            <div class="meta-item">
-                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                    stroke-width="2">
-                                    <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
-                                    <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
-                                </svg>
-                                <span>Full-time</span>
-                            </div>
-                        </div>
-                        <p class="job-description">
-                            Bergabunglah sebagai LC Karaoke di venue premium kami. Income harian, mess gratis, dan
-                            fasilitas lengkap.
-                        </p>
-                        <ul class="job-highlights">
-                            <li><span class="highlight-icon">✓</span> Gaji Harian</li>
-                            <li><span class="highlight-icon">✓</span> Mess Gratis</li>
-                            <li><span class="highlight-icon">✓</span> Make-up Gratis</li>
-                        </ul>
-                    </div>
-                    <div class="job-card-footer">
-                        <a href="detail-lowongan.html?id=karaoke-lc" class="btn-view-detail">
-                            Lihat Detail
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                stroke-width="2">
-                                <path d="M5 12h14M12 5l7 7-7 7"></path>
-                            </svg>
-                        </a>
-                        <a href="lamar.html?job=karaoke-lc" class="btn-apply">Lamar</a>
-                    </div>
-                </div>
-
-                <!-- Job Card 2 - Featured -->
-                <div class="job-card featured scroll-fade" data-category="spa" data-location="bandung">
-                    <div class="job-card-header">
-                        <div class="job-badges">
-                            <span class="badge badge-featured">⭐ Featured</span>
-                            <span class="badge badge-category">Spa & Wellness</span>
-                        </div>
-                        <div class="job-salary">
-                            <span class="salary-amount">Rp 400rb - 500rb</span>
-                            <span class="salary-per">per voucher</span>
-                        </div>
-                    </div>
-                    <div class="job-card-body">
-                        <h3 class="job-title">Spa Therapist</h3>
-                        <div class="job-meta">
-                            <div class="meta-item">
-                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                    stroke-width="2">
-                                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
-                                    <circle cx="12" cy="10" r="3"></circle>
-                                </svg>
-                                <span>Bandung</span>
-                            </div>
-                            <div class="meta-item">
-                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                    stroke-width="2">
-                                    <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
-                                    <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
-                                </svg>
-                                <span>Full-time</span>
-                            </div>
-                        </div>
-                        <p class="job-description">
-                            Kami mencari Spa Therapist yang terampil. Training gratis akan diberikan untuk teknik-teknik
-                            terbaru.
-                        </p>
-                        <ul class="job-highlights">
-                            <li><span class="highlight-icon">✓</span> Training Gratis</li>
-                            <li><span class="highlight-icon">✓</span> Mess Tersedia</li>
-                            <li><span class="highlight-icon">✓</span> Bonus Performance</li>
-                        </ul>
-                    </div>
-                    <div class="job-card-footer">
-                        <a href="detail-lowongan.html?id=spa-therapist" class="btn-view-detail">
-                            Lihat Detail
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                stroke-width="2">
-                                <path d="M5 12h14M12 5l7 7-7 7"></path>
-                            </svg>
-                        </a>
-                        <a href="lamar.html?job=spa-therapist" class="btn-apply">Lamar</a>
-                    </div>
-                </div>
-
-                <!-- Job Card 3 -->
-                <div class="job-card scroll-fade" data-category="hospitality" data-location="bandung">
-                    <div class="job-card-header">
-                        <div class="job-badges">
-                            <span class="badge badge-category">Hospitality</span>
-                        </div>
-                        <div class="job-salary">
-                            <span class="salary-amount">Rp 350rb - 450rb</span>
-                            <span class="salary-per">per voucher</span>
-                        </div>
-                    </div>
-                    <div class="job-card-body">
-                        <h3 class="job-title">Guest Relation Officer</h3>
-                        <div class="job-meta">
-                            <div class="meta-item">
-                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                    stroke-width="2">
-                                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
-                                    <circle cx="12" cy="10" r="3"></circle>
-                                </svg>
-                                <span>Bandung</span>
-                            </div>
-                            <div class="meta-item">
-                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                    stroke-width="2">
-                                    <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
-                                    <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
-                                </svg>
-                                <span>Full-time</span>
-                            </div>
-                        </div>
-                        <p class="job-description">
-                            Posisi GRO untuk menyambut dan melayani tamu dengan ramah. Fresh graduate welcome!
-                        </p>
-                        <ul class="job-highlights">
-                            <li><span class="highlight-icon">✓</span> Gaji Menarik</li>
-                            <li><span class="highlight-icon">✓</span> Tunjangan Transport</li>
-                            <li><span class="highlight-icon">✓</span> Training Gratis</li>
-                        </ul>
-                    </div>
-                    <div class="job-card-footer">
-                        <a href="detail-lowongan.html?id=guest-relation" class="btn-view-detail">
-                            Lihat Detail
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                stroke-width="2">
-                                <path d="M5 12h14M12 5l7 7-7 7"></path>
-                            </svg>
-                        </a>
-                        <a href="lamar.html?job=guest-relation" class="btn-apply">Lamar</a>
-                    </div>
-                </div>
-            </div>
-
-            <!-- No Results Message -->
-            <div class="no-results" id="noResults" style="display: none;">
-                <div class="no-results-icon">🔍</div>
-                <h3>Tidak Ada Hasil</h3>
-                <p>Tidak ada lowongan yang sesuai dengan filter Anda. Coba ubah kriteria pencarian.</p>
-            </div>
+        <div class="card-content">
+          <h3>Denver Club</h3>
+          <p class="card-city">ðŸ“ Kota Bandung</p>
+          <p class="card-posisi">Ladies Karaoke</p>
         </div>
-    </section>
+      </div>
 
-    <!-- CTA Section -->
-    <section class="cta-section">
-        <div class="container">
-            <div class="cta-card scroll-fade">
-                <div class="cta-content">
-                    <h2 class="cta-title">
-                        Tidak Menemukan Posisi yang Cocok?
-                    </h2>
-                    <p class="cta-description">
-                        Hubungi kami langsung via WhatsApp untuk konsultasi karir dan informasi lowongan terbaru!
-                    </p>
-                    <div class="cta-buttons">
-                        <a href="https://wa.me/6289669094929?text=Halo%20Liguns%20Entertainment,%20saya%20ingin%20bertanya%20tentang%20lowongan%20kerja"
-                            target="_blank" class="cta-button-large">
-                            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
-                                <path
-                                    d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z" />
-                            </svg>
-                            <span>Hubungi via WhatsApp</span>
-                        </a>
-                    </div>
-                </div>
-            </div>
+      <div class="lowongan-card" data-city="bandung" data-name="Denver Spa">
+        <div class="card-image">
+          <img src="assets/img/Logo/DENVER SPA.png" alt="Denver Spa">
+          <div class="overlay"><a href="SpaDenver.html" class="view-btn">Lihat Detail</a></div>
         </div>
-    </section>
-
-    <!-- Footer -->
-    <footer class="footer">
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-brand">
-                    <a href="index.html" class="logo">
-                        <img src="logo.png" alt="Liguns Entertainment" class="logo-img">
-                        <span class="logo-text">Liguns Entertainment</span>
-                    </a>
-                    <p class="footer-description">
-                        Premium talent agency untuk Karaoke & Spa dengan fasilitas terlengkap dan income terbaik.
-                    </p>
-                </div>
-
-                <div class="footer-links">
-                    <div class="footer-column">
-                        <h4>Quick Links</h4>
-                        <ul>
-                            <li><a href="index.html">Home</a></li>
-                            <li><a href="lowongan.html">Lowongan</a></li>
-                            <li><a href="lamar.html">Lamar</a></li>
-                            <li><a href="index.html#faq">FAQ</a></li>
-                        </ul>
-                    </div>
-                    <div class="footer-column">
-                        <h4>Kontak</h4>
-                        <ul>
-                            <li><a href="https://wa.me/6289669094929">WhatsApp</a></li>
-                            <li><a href="mailto:info@liguns.com">Email</a></li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-
-            <div class="footer-bottom">
-                <p>&copy; 2026 Liguns Entertainment.</p>
-                <div class="footer-legal">
-                    <a href="#">Privacy Policy</a>
-                    <span>•</span>
-                    <a href="#">Terms of Service</a>
-                </div>
-            </div>
+        <div class="card-content">
+          <h3>Denver Spa</h3>
+          <p class="card-city">ðŸ“ Kota Bandung</p>
+          <p class="card-posisi">Terapis Spa</p>
         </div>
-    </footer>
+      </div>
 
-    <!-- Scripts -->
-    <script src="script.js"></script>
-    <script>
-        // Job Filter Functionality
-        document.addEventListener('DOMContentLoaded', function () {
-            const categoryFilter = document.getElementById('categoryFilter');
-            const locationFilter = document.getElementById('locationFilter');
-            const searchInput = document.getElementById('searchInput');
-            const jobsGrid = document.getElementById('jobsGrid');
-            const noResults = document.getElementById('noResults');
+      <div class="lowongan-card" data-city="bandung" data-name="Vender Club">
+        <div class="card-image">
+          <img src="assets/img/Logo/VENDER.png" alt="Vender Club">
+          <div class="overlay"><a href="Vender.html" class="view-btn">Lihat Detail</a></div>
+        </div>
+        <div class="card-content">
+          <h3>Vender Club</h3>
+          <p class="card-city">ðŸ“ Kota Bandung</p>
+          <p class="card-posisi">Ladies Karaoke</p>
+        </div>
+      </div>
 
-            function filterJobs() {
-                const category = categoryFilter.value;
-                const location = locationFilter.value;
-                const search = searchInput.value.toLowerCase();
+      <div class="lowongan-card" data-city="bandung" data-name="80 Spa">
+        <div class="card-image">
+          <img src="assets/img/Logo/80 SPA.png" alt="80 Spa">
+          <div class="overlay"><a href="80spa.html" class="view-btn">Lihat Detail</a></div>
+        </div>
+        <div class="card-content">
+          <h3>80 Spa</h3>
+          <p class="card-city">ðŸ“ Kota Bandung</p>
+          <p class="card-posisi">Terapis Spa</p>
+        </div>
+      </div>
 
-                const jobCards = jobsGrid.querySelectorAll('.job-card');
-                let visibleCount = 0;
+      <div class="lowongan-card" data-city="bandung" data-name="Saga Vigour">
+        <div class="card-image">
+          <img src="assets/img/Logo/SAGA VIGOUR.png" alt="Saga Vigour">
+          <div class="overlay"><a href="Sagavigour.html" class="view-btn">Lihat Detail</a></div>
+        </div>
+        <div class="card-content">
+          <h3>Saga Vigour</h3>
+          <p class="card-city">ðŸ“ Kota Bandung</p>
+          <p class="card-posisi">Terapis Spa</p>
+        </div>
+      </div>
 
-                jobCards.forEach(card => {
-                    const cardCategory = card.dataset.category;
-                    const cardLocation = card.dataset.location;
-                    const cardTitle = card.querySelector('.job-title').textContent.toLowerCase();
-                    const cardDesc = card.querySelector('.job-description').textContent.toLowerCase();
+      <div class="lowongan-card" data-city="bandung" data-name="Sultan Spa">
+        <div class="card-image">
+          <img src="assets/img/Logo/SULTAN SPA.png" alt="Sultan Spa">
+          <div class="overlay"><a href="Sultanspa.html" class="view-btn">Lihat Detail</a></div>
+        </div>
+        <div class="card-content">
+          <h3>Sultan Spa</h3>
+          <p class="card-city">ðŸ“ Kota Bandung</p>
+          <p class="card-posisi">Terapis Spa</p>
+        </div>
+      </div>
 
-                    const matchCategory = category === 'all' || cardCategory === category;
-                    const matchLocation = location === 'all' || cardLocation === location;
-                    const matchSearch = !search || cardTitle.includes(search) || cardDesc.includes(search);
+      <div class="lowongan-card" data-city="bandung" data-name="LIV Club">
+        <div class="card-image">
+          <img src="assets/img/Logo/LIV.png" alt="LIV Club">
+          <div class="overlay"><a href="Liv.html" class="view-btn">Lihat Detail</a></div>
+        </div>
+        <div class="card-content">
+          <h3>LIV Club</h3>
+          <p class="card-city">ðŸ“ Kota Bandung</p>
+          <p class="card-posisi">Ladies Karaoke</p>
+        </div>
+      </div>
 
-                    if (matchCategory && matchLocation && matchSearch) {
-                        card.style.display = '';
-                        visibleCount++;
-                    } else {
-                        card.style.display = 'none';
-                    }
-                });
+      <div class="lowongan-card" data-city="bandung" data-name="Heritage">
+        <div class="card-image">
+          <img src="assets/img/Logo/HERITAGE.png" alt="Heritage">
+          <div class="overlay"><a href="Heritage.html" class="view-btn">Lihat Detail</a></div>
+        </div>
+        <div class="card-content">
+          <h3>Heritage</h3>
+          <p class="card-city">ðŸ“ Kota Bandung</p>
+          <p class="card-posisi">Terapis Spa â€¢ Ladies Karaoke</p>
+        </div>
+      </div>
 
-                noResults.style.display = visibleCount === 0 ? 'block' : 'none';
-            }
+      <!-- PLACEHOLDER UNTUK KOTA LAINNYA -->
+      <div class="lowongan-card placeholder" data-city="lainnya" data-name="Kota Jakarta">
+        <div class="card-image-placeholder">
+          <span class="placeholder-text">ðŸ™ï¸</span>
+          <span class="coming-soon">Segera Hadir</span>
+        </div>
+        <div class="card-content">
+          <h3>Jakarta</h3>
+          <p class="card-city">ðŸ“ Kota Jakarta</p>
+          <p class="card-posisi">Posisi tersedia</p>
+          <p class="placeholder-info">Lowongan kerja di Jakarta akan segera tersedia</p>
+        </div>
+      </div>
 
-            categoryFilter.addEventListener('change', filterJobs);
-            locationFilter.addEventListener('change', filterJobs);
-            searchInput.addEventListener('input', filterJobs);
-        });
-    </script>
+      <div class="lowongan-card placeholder" data-city="lainnya" data-name="Kota Surabaya">
+        <div class="card-image-placeholder">
+          <span class="placeholder-text">ðŸ™ï¸</span>
+          <span class="coming-soon">Segera Hadir</span>
+        </div>
+        <div class="card-content">
+          <h3>Surabaya</h3>
+          <p class="card-city">ðŸ“ Kota Surabaya</p>
+          <p class="card-posisi">Posisi tersedia</p>
+          <p class="placeholder-info">Lowongan kerja di Surabaya akan segera tersedia</p>
+        </div>
+      </div>
+
+      <div class="lowongan-card placeholder" data-city="lainnya" data-name="Kota Yogyakarta">
+        <div class="card-image-placeholder">
+          <span class="placeholder-text">ðŸ™ï¸</span>
+          <span class="coming-soon">Segera Hadir</span>
+        </div>
+        <div class="card-content">
+          <h3>Yogyakarta</h3>
+          <p class="card-city">ðŸ“ Kota Yogyakarta</p>
+          <p class="card-posisi">Posisi tersedia</p>
+          <p class="placeholder-info">Lowongan kerja di Yogyakarta akan segera tersedia</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- NO RESULTS MESSAGE -->
+    <div id="noResults" class="no-results" style="display: none;">
+      <p>ðŸ˜” Tidak ada lowongan yang sesuai dengan pencarian Anda</p>
+      <button onclick="resetFilters()" class="btn-reset">Bersihkan Filter</button>
+    </div>
+  </section>
+
+<footer>
+  <h3 class="footer-title">IKUTI KAMI</h3>
+
+  <div class="footer-socials">
+          <a href="https://instagram.com" target="_blank" title="Instagram"><img src="assets/img/Instagram.png" alt="Instagram"></a>
+          <a href="https://wa.me/6289669094929" target="_blank" title="WhatsApp"><img src="assets/img/Whatsapp.png" alt="WhatsApp"></a>
+          <a href="https://tiktok.com" target="_blank" title="TikTok"><img src="assets/img/Tiktok.png" alt="TikTok"></a>
+        </div>
+      </div>
+
+  <div class="footer-divider"></div>
+
+  <div class="footer-copy">
+    © 2023 Liguns Entertainment | All Rights Reserved
+  </div>
+</footer>
+
+  <script src="assets/js/navigation.js"></script>
+  <script src="assets/js/lowongan-filter.js"></script>
 </body>
-
 </html>
+
+
+
+

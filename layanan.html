@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Layanan - Liguns Entertainment</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Vollkorn:wght@400;500;600&family=Poppins:wght@400;500;600&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/common.css">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/premium-enhancements.css">
+    <style>
+        .services-section {
+            padding: calc(100px + var(--spacing-xl)) var(--spacing-md) var(--spacing-2xl);
+        }
+
+        .services-header {
+            text-align: center;
+            margin-bottom: var(--spacing-xl);
+        }
+
+        .services-header h1 {
+            font-family: var(--font-heading);
+            font-size: clamp(2rem, 5vw, 3rem);
+            margin-bottom: var(--spacing-sm);
+            background: linear-gradient(135deg, #fff 0%, var(--color-gold) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .services-header p {
+            color: var(--color-text-secondary);
+            font-size: 1.1rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: var(--spacing-lg);
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .service-card {
+            background: var(--color-bg-card);
+            border: 1px solid var(--color-border);
+            border-radius: 16px;
+            padding: var(--spacing-xl);
+            text-align: center;
+            transition: var(--transition-normal);
+        }
+
+        .service-card:hover {
+            border-color: var(--color-border-gold);
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(201, 162, 39, 0.15);
+        }
+
+        .service-icon {
+            font-size: 3rem;
+            margin-bottom: var(--spacing-md);
+        }
+
+        .service-card h3 {
+            font-family: var(--font-heading);
+            font-size: 1.4rem;
+            color: var(--color-gold);
+            margin-bottom: var(--spacing-sm);
+        }
+
+        .service-card p {
+            color: var(--color-text-secondary);
+            line-height: 1.7;
+            margin-bottom: var(--spacing-md);
+        }
+
+        .service-card ul {
+            text-align: left;
+            color: var(--color-text-secondary);
+        }
+
+        .service-card ul li {
+            padding: 0.5rem 0;
+            border-bottom: 1px solid var(--color-border);
+        }
+
+        .service-card ul li:last-child {
+            border-bottom: none;
+        }
+
+        .service-card ul li::before {
+            content: '✓';
+            color: var(--color-gold);
+            margin-right: 0.5rem;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body class="fade-page">
+
+    <!-- Header -->
+    <header>
+        <div class="header-container">
+            <div class="logo">
+                <a href="index.html"><img src="assets/img/Logo Liguns.png" alt="Liguns Entertainment"></a>
+            </div>
+            <div class="header-right">
+                <nav id="navbar">
+                    <ul>
+                        <li><a href="index.html">Beranda</a></li>
+                        <li><a href="lowongan.html">Lowongan Kerja</a></li>
+                        <li><a href="layanan.html">Layanan</a></li>
+                        <li><a href="tentang.html">Tentang</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Services Section -->
+    <section class="services-section">
+        <div class="services-header">
+            <h1>Layanan Kami</h1>
+            <p>Berbagai layanan profesional untuk mendukung karier Anda di industri hiburan malam</p>
+        </div>
+
+        <div class="services-grid">
+            <div class="service-card fade-section">
+                <div class="service-icon">🎤</div>
+                <h3>Penyaluran Ladies Karaoke</h3>
+                <p>Penempatan kerja di venue karaoke premium dengan fasilitas lengkap dan income menarik.</p>
+                <ul>
+                    <li>Venue terverifikasi & aman</li>
+                    <li>Income Rp 400rb - 550rb/voucher</li>
+                    <li>Mess gratis</li>
+                    <li>Make-up & seragam disediakan</li>
+                </ul>
+            </div>
+
+            <div class="service-card fade-section">
+                <div class="service-icon">💆</div>
+                <h3>Penyaluran Terapis Spa</h3>
+                <p>Kesempatan bekerja di spa & wellness center terbaik dengan training profesional.</p>
+                <ul>
+                    <li>Training gratis</li>
+                    <li>Income kompetitif</li>
+                    <li>Jenjang karir jelas</li>
+                    <li>Lingkungan kerja nyaman</li>
+                </ul>
+            </div>
+
+            <div class="service-card fade-section">
+                <div class="service-icon">📱</div>
+                <h3>Social Media Management</h3>
+                <p>Layanan pengelolaan akun sosial media untuk personal branding talent.</p>
+                <ul>
+                    <li>Content creation</li>
+                    <li>Account management</li>
+                    <li>Engagement optimization</li>
+                    <li>Brand building</li>
+                </ul>
+            </div>
+
+            <div class="service-card fade-section">
+                <div class="service-icon">🎓</div>
+                <h3>Training & Development</h3>
+                <p>Program pelatihan untuk meningkatkan skill dan profesionalisme talent.</p>
+                <ul>
+                    <li>Soft skill training</li>
+                    <li>Grooming & etiquette</li>
+                    <li>Communication skill</li>
+                    <li>Personal development</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section fade-section">
+        <div class="cta-container">
+            <h2 class="cta-title">Tertarik dengan Layanan Kami?</h2>
+            <div class="cta-buttons">
+                <a href="gabung.html" class="cta-btn cta-btn-primary">Gabung Sekarang</a>
+                <a href="https://wa.me/6289669094929" target="_blank" class="cta-btn cta-btn-secondary">Hubungi Kami</a>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <h3 class="footer-title">IKUTI KAMI</h3>
+        <div class="footer-socials">
+            <a href="https://instagram.com" target="_blank" title="Instagram"><img src="assets/img/Instagram.png"
+                    alt="Instagram"></a>
+            <a href="https://wa.me/6289669094929" target="_blank" title="WhatsApp"><img src="assets/img/Whatsapp.png"
+                    alt="WhatsApp"></a>
+            <a href="https://tiktok.com" target="_blank" title="TikTok"><img src="assets/img/Tiktok.png"
+                    alt="TikTok"></a>
+        </div>
+        <div class="footer-divider"></div>
+        <div class="footer-copy">© 2023 Liguns Entertainment | All Rights Reserved</div>
+    </footer>
+
+    <script src="assets/js/navigation.js"></script>
+</body>
+
+</html>
