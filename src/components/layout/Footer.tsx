@@ -31,7 +31,7 @@ export default function Footer() {
 
     const socialLinks = [
         { icon: '/icon-instagram.png', href: 'https://instagram.com/ligunsofficial', label: 'Instagram' },
-        { icon: '/icon-whatsapp.png', href: 'https://wa.me/6281234567890', label: 'WhatsApp' },
+        { icon: '/icon-whatsapp.png', href: 'https://wa.me/6289669094929', label: 'WhatsApp' },
         { icon: '/icon-tiktok.png', href: 'https://tiktok.com/@ligunsofficial', label: 'TikTok' },
     ];
 

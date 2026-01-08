@@ -11,20 +11,23 @@ import {
     Briefcase,
     Eye,
     X,
-    Save
+    Save,
+    Upload,
+    Image as ImageIcon
 } from 'lucide-react';
+import Image from 'next/image';
 
 // Sample lowongan data
 const initialLowongan = [
-    { id: 1, name: 'Venetian Havana', city: 'Bandung', position: 'Terapis Spa', featured: true, status: 'active' },
-    { id: 2, name: 'Denver Club', city: 'Bandung', position: 'Ladies Karaoke', featured: false, status: 'active' },
-    { id: 3, name: 'Denver Spa', city: 'Bandung', position: 'Terapis Spa', featured: false, status: 'active' },
-    { id: 4, name: 'Vender Club', city: 'Bandung', position: 'Ladies Karaoke', featured: false, status: 'active' },
-    { id: 5, name: '80 Spa', city: 'Bandung', position: 'Terapis Spa', featured: false, status: 'active' },
-    { id: 6, name: 'Saga Vigour', city: 'Bandung', position: 'Terapis Spa', featured: false, status: 'inactive' },
-    { id: 7, name: 'Sultan Spa', city: 'Bandung', position: 'Terapis Spa', featured: false, status: 'active' },
-    { id: 8, name: 'LIV Club', city: 'Bandung', position: 'Ladies Karaoke', featured: false, status: 'active' },
-    { id: 9, name: 'Heritage', city: 'Bandung', position: 'Terapis Spa • Ladies Karaoke', featured: false, status: 'active' },
+    { id: 1, name: 'Venetian Havana', city: 'Bandung', position: 'Terapis Spa', featured: true, status: 'active', image: '' },
+    { id: 2, name: 'Denver Club', city: 'Bandung', position: 'Ladies Karaoke', featured: false, status: 'active', image: '' },
+    { id: 3, name: 'Denver Spa', city: 'Bandung', position: 'Terapis Spa', featured: false, status: 'active', image: '' },
+    { id: 4, name: 'Vender Club', city: 'Bandung', position: 'Ladies Karaoke', featured: false, status: 'active', image: '' },
+    { id: 5, name: '80 Spa', city: 'Bandung', position: 'Terapis Spa', featured: false, status: 'active', image: '' },
+    { id: 6, name: 'Saga Vigour', city: 'Bandung', position: 'Terapis Spa', featured: false, status: 'inactive', image: '' },
+    { id: 7, name: 'Sultan Spa', city: 'Bandung', position: 'Terapis Spa', featured: false, status: 'active', image: '' },
+    { id: 8, name: 'LIV Club', city: 'Bandung', position: 'Ladies Karaoke', featured: false, status: 'active', image: '' },
+    { id: 9, name: 'Heritage', city: 'Bandung', position: 'Terapis Spa • Ladies Karaoke', featured: false, status: 'active', image: '' },
 ];
 
 const cities = ['Bandung', 'Jakarta', 'Surabaya', 'Yogyakarta'];
@@ -40,7 +43,8 @@ export default function LowonganManagement() {
         city: 'Bandung',
         position: 'Terapis Spa',
         featured: false,
-        status: 'active'
+        status: 'active',
+        image: ''
     });
 
     // Filter lowongan by search
@@ -58,7 +62,8 @@ export default function LowonganManagement() {
                 city: item.city,
                 position: item.position,
                 featured: item.featured,
-                status: item.status
+                status: item.status,
+                image: item.image || ''
             });
         } else {
             setEditingItem(null);
@@ -67,10 +72,23 @@ export default function LowonganManagement() {
                 city: 'Bandung',
                 position: 'Terapis Spa',
                 featured: false,
-                status: 'active'
+                status: 'active',
+                image: ''
             });
         }
         setIsModalOpen(true);
+    };
+
+    // Handle Image Upload
+    const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                setFormData({ ...formData, image: reader.result as string });
+            };
+            reader.readAsDataURL(file);
+        }
     };
 
     // Save lowongan
@@ -152,8 +170,12 @@ export default function LowonganManagement() {
                                 >
                                     <td className="px-6 py-4">
                                         <div className="flex items-center gap-3">
-                                            <div className="w-10 h-10 bg-gold-500/20 rounded-lg flex items-center justify-center">
-                                                <Briefcase className="w-5 h-5 text-gold-500" />
+                                            <div className="w-10 h-10 bg-gold-500/20 rounded-lg flex items-center justify-center overflow-hidden">
+                                                {item.image ? (
+                                                    <img src={item.image} alt={item.name} className="w-full h-full object-cover" />
+                                                ) : (
+                                                    <Briefcase className="w-5 h-5 text-gold-500" />
+                                                )}
                                             </div>
                                             <div>
                                                 <p className="font-medium text-white">{item.name}</p>
@@ -216,7 +238,7 @@ export default function LowonganManagement() {
                     <motion.div
                         initial={{ opacity: 0, scale: 0.95 }}
                         animate={{ opacity: 1, scale: 1 }}
-                        className="bg-[#111111] rounded-2xl p-6 w-full max-w-lg"
+                        className="bg-[#111111] rounded-2xl p-6 w-full max-w-lg max-h-[90vh] overflow-y-auto"
                     >
                         <div className="flex items-center justify-between mb-6">
                             <h2 className="text-xl font-bold text-white">
@@ -231,6 +253,33 @@ export default function LowonganManagement() {
                         </div>
 
                         <div className="space-y-4">
+                            {/* Image Upload */}
+                            <div>
+                                <label className="block text-sm font-medium text-gray-300 mb-2">Logo Perusahaan</label>
+                                <div className="flex items-center gap-4">
+                                    <div className="w-20 h-20 bg-white/5 border border-white/10 rounded-xl flex items-center justify-center overflow-hidden relative">
+                                        {formData.image ? (
+                                            <img src={formData.image} alt="Preview" className="w-full h-full object-cover" />
+                                        ) : (
+                                            <ImageIcon className="w-8 h-8 text-gray-500" />
+                                        )}
+                                    </div>
+                                    <div className="flex-1">
+                                        <label className="cursor-pointer inline-flex items-center gap-2 bg-white/5 hover:bg-white/10 text-white font-medium px-4 py-2 rounded-lg transition-all border border-white/10">
+                                            <Upload className="w-4 h-4" />
+                                            Upload Logo
+                                            <input
+                                                type="file"
+                                                accept="image/*"
+                                                className="hidden"
+                                                onChange={handleImageUpload}
+                                            />
+                                        </label>
+                                        <p className="text-xs text-gray-500 mt-2">Format: JPG, PNG, GIF (Max 2MB)</p>
+                                    </div>
+                                </div>
+                            </div>
+
                             {/* Name */}
                             <div>
                                 <label className="block text-sm font-medium text-gray-300 mb-2">Nama Venue</label>
@@ -320,3 +369,4 @@ export default function LowonganManagement() {
         </div>
     );
 }
+
