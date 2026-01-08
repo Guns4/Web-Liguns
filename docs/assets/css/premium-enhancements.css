@@ -1,0 +1,557 @@
+/* ===================================
+   LUXURY BLACK & GOLD ENHANCEMENTS
+   Premium Dark Theme Effects
+   ================================ */
+
+/* ===== Dark Glassmorphism ===== */
+.glass-card {
+    background: rgba(26, 26, 26, 0.8);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border: 1px solid rgba(212, 175, 55, 0.3);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6),
+        0 0 20px rgba(212, 175, 55, 0.1);
+    border-radius: 24px;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.glass-card:hover {
+    transform: translateY(-10px) scale(1.02);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8),
+        0 0 40px rgba(212, 175, 55, 0.2);
+    background: rgba(26, 26, 26, 0.9);
+    border-color: var(--gold-primary);
+}
+
+/* ===== Gold Gradient Text ===== */
+.gradient-text {
+    background: linear-gradient(135deg, #D4AF37 0%, #FFD700 50%, #F4E4C1 100%);
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: goldShimmer 3s ease infinite;
+    text-shadow: 0 0 30px rgba(212, 175, 55, 0.3);
+}
+
+@keyframes goldShimmer {
+
+    0%,
+    100% {
+        background-position: 0% 50%;
+    }
+
+    50% {
+        background-position: 100% 50%;
+    }
+}
+
+/* ===== Floating with Gold Glow ===== */
+.floating {
+    animation: floatingGold 3s ease-in-out infinite;
+}
+
+@keyframes floatingGold {
+
+    0%,
+    100% {
+        transform: translateY(0px);
+        filter: drop-shadow(0 10px 20px rgba(212, 175, 55, 0.2));
+    }
+
+    50% {
+        transform: translateY(-15px);
+        filter: drop-shadow(0 20px 30px rgba(212, 175, 55, 0.3));
+    }
+}
+
+/* ===== Gold Shine Effect ===== */
+.shine-effect {
+    position: relative;
+    overflow: hidden;
+}
+
+.shine-effect::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(45deg,
+            transparent 30%,
+            rgba(255, 215, 0, 0.3) 50%,
+            transparent 70%);
+    animation: goldShine 3s ease-in-out infinite;
+}
+
+@keyframes goldShine {
+    0% {
+        transform: translate(-100%, -100%) rotate(45deg);
+    }
+
+    50%,
+    100% {
+        transform: translate(100%, 100%) rotate(45deg);
+    }
+}
+
+/* ===== Luxury Gold Accents ===== */
+.gold-accent {
+    color: var(--gold-primary);
+    text-shadow: 0 0 20px rgba(212, 175, 55, 0.4);
+}
+
+.gold-border {
+    border: 2px solid var(--gold-primary);
+    box-shadow: 0 0 30px rgba(212, 175, 55, 0.3),
+        inset 0 0 20px rgba(212, 175, 55, 0.1);
+}
+
+.gold-bg {
+    background: linear-gradient(135deg, #D4AF37 0%, #FFD700 50%, #D4AF37 100%);
+    color: var(--luxury-black);
+    box-shadow: 0 10px 40px rgba(212, 175, 55, 0.4);
+}
+
+/* ===== Premium Dark Shadows ===== */
+.shadow-luxury {
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.7),
+        0 0 20px rgba(212, 175, 55, 0.15),
+        inset 0 1px 0 rgba(212, 175, 55, 0.1);
+}
+
+.shadow-luxury-hover:hover {
+    box-shadow: 0 30px 80px rgba(0, 0, 0, 0.8),
+        0 0 40px rgba(212, 175, 55, 0.25),
+        inset 0 1px 0 rgba(212, 175, 55, 0.2);
+}
+
+/* ===== 3D Card Dark Theme ===== */
+.card-3d {
+    transform-style: preserve-3d;
+    transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+    background: var(--dark-charcoal);
+    border: 1px solid rgba(212, 175, 55, 0.2);
+}
+
+.card-3d:hover {
+    transform: perspective(1000px) rotateX(5deg) rotateY(5deg) scale(1.05);
+    box-shadow: 0 30px 80px rgba(0, 0, 0, 0.9),
+        0 0 40px rgba(212, 175, 55, 0.3);
+}
+
+/* ===== Elegant Dark Dividers ===== */
+.elegant-divider {
+    position: relative;
+    height: 2px;
+    background: linear-gradient(90deg,
+            transparent 0%,
+            rgba(212, 175, 55, 0.2) 20%,
+            var(--gold-primary) 50%,
+            rgba(212, 175, 55, 0.2) 80%,
+            transparent 100%);
+    margin: 4rem 0;
+    box-shadow: 0 0 20px rgba(212, 175, 55, 0.2);
+}
+
+.elegant-divider::before,
+.elegant-divider::after {
+    content: '◆';
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--gold-primary);
+    font-size: 1.5rem;
+    text-shadow: 0 0 20px rgba(212, 175, 55, 0.5);
+}
+
+.elegant-divider::before {
+    left: 0;
+}
+
+.elegant-divider::after {
+    right: 0;
+}
+
+/* ===== Animated Background Shapes (Dark) ===== */
+.hero-bg-animated {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    z-index: 0;
+}
+
+.hero-bg-animated .shape {
+    position: absolute;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(212, 175, 55, 0.15), transparent);
+    animation: floatShape 20s ease-in-out infinite;
+    box-shadow: 0 0 40px rgba(212, 175, 55, 0.2);
+}
+
+.hero-bg-animated .shape1 {
+    width: 400px;
+    height: 400px;
+    top: 5%;
+    left: 5%;
+    animation-delay: 0s;
+}
+
+.hero-bg-animated .shape2 {
+    width: 300px;
+    height: 300px;
+    top: 50%;
+    left: 70%;
+    animation-delay: 3s;
+}
+
+.hero-bg-animated .shape3 {
+    width: 200px;
+    height: 200px;
+    top: 75%;
+    left: 15%;
+    animation-delay: 6s;
+}
+
+.hero-bg-animated .shape4 {
+    width: 350px;
+    height: 350px;
+    top: 15%;
+    left: 80%;
+    animation-delay: 9s;
+}
+
+@keyframes floatShape {
+
+    0%,
+    100% {
+        transform: translate(0, 0) scale(1);
+        opacity: 0.2;
+    }
+
+    50% {
+        transform: translate(50px, -50px) scale(1.2);
+        opacity: 0.4;
+    }
+}
+
+/* ===== Gold Particle Effect ===== */
+.particle {
+    position: absolute;
+    width: 3px;
+    height: 3px;
+    background: radial-gradient(circle, var(--gold-primary), transparent);
+    border-radius: 50%;
+    animation: particleFloat 20s linear infinite;
+    opacity: 0;
+    box-shadow: 0 0 10px var(--gold-primary);
+}
+
+@keyframes particleFloat {
+    0% {
+        transform: translateY(100vh) translateX(0) rotate(0deg);
+        opacity: 0;
+    }
+
+    10% {
+        opacity: 0.8;
+    }
+
+    90% {
+        opacity: 0.8;
+    }
+
+    100% {
+        transform: translateY(-100px) translateX(150px) rotate(360deg);
+        opacity: 0;
+    }
+}
+
+/* ===== Luxury Number Counters ===== */
+.counter-number {
+    font-size: 3.5rem;
+    font-weight: 800;
+    font-family: var(--font-display);
+    background: linear-gradient(135deg, #D4AF37, #FFD700, #F4E4C1);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: numberGlow 2s ease-in-out infinite;
+    filter: drop-shadow(0 0 10px rgba(212, 175, 55, 0.4));
+}
+
+@keyframes numberGlow {
+
+    0%,
+    100% {
+        filter: drop-shadow(0 0 10px rgba(212, 175, 55, 0.4));
+    }
+
+    50% {
+        filter: drop-shadow(0 0 25px rgba(212, 175, 55, 0.6));
+    }
+}
+
+/* ===== Premium Dark Badges ===== */
+.premium-badge {
+    position: relative;
+    display: inline-block;
+    padding: 0.75rem 2rem;
+    background: linear-gradient(135deg, var(--dark-charcoal), var(--luxury-black));
+    border: 2px solid var(--gold-primary);
+    color: var(--gold-primary);
+    font-weight: 700;
+    font-size: 0.95rem;
+    border-radius: 50px;
+    box-shadow: 0 4px 20px rgba(212, 175, 55, 0.3),
+        inset 0 1px 0 rgba(212, 175, 55, 0.2);
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    overflow: hidden;
+}
+
+.premium-badge::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(45deg,
+            transparent 30%,
+            rgba(255, 215, 0, 0.2) 50%,
+            transparent 70%);
+    animation: badgeShimmer 3s linear infinite;
+}
+
+@keyframes badgeShimmer {
+    0% {
+        transform: translateX(-100%) translateY(-100%) rotate(45deg);
+    }
+
+    100% {
+        transform: translateX(100%) translateY(100%) rotate(45deg);
+    }
+}
+
+/* ===== Luxury Dark Image Overlays ===== */
+.image-luxury-overlay {
+    position: relative;
+    overflow: hidden;
+    border-radius: 20px;
+    border: 1px solid rgba(212, 175, 55, 0.2);
+}
+
+.image-luxury-overlay::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg,
+            rgba(212, 175, 55, 0.3) 0%,
+            rgba(10, 10, 10, 0.7) 100%);
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    z-index: 1;
+}
+
+.image-luxury-overlay:hover::before {
+    opacity: 1;
+}
+
+.image-luxury-overlay img {
+    transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    filter: brightness(0.9);
+}
+
+.image-luxury-overlay:hover img {
+    transform: scale(1.1);
+    filter: brightness(1.1);
+}
+
+/* ===== Elegant Dark Spinner ===== */
+.elegant-spinner {
+    width: 60px;
+    height: 60px;
+    border: 4px solid rgba(212, 175, 55, 0.2);
+    border-top-color: var(--gold-primary);
+    border-radius: 50%;
+    animation: elegantSpin 1s cubic-bezier(0.68, -0.55, 0.265, 1.55) infinite;
+    box-shadow: 0 0 20px rgba(212, 175, 55, 0.3);
+}
+
+@keyframes elegantSpin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+/* ===== Dark Parallax Effect ===== */
+.parallax {
+    transition: transform 0.1s ease-out;
+}
+
+/* ===== Luxury Dark Tooltips ===== */
+.tooltip {
+    position: relative;
+    cursor: pointer;
+}
+
+.tooltip::before {
+    content: attr(data-tooltip);
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%) translateY(-10px);
+    padding: 0.75rem 1.25rem;
+    background: rgba(26, 26, 26, 0.98);
+    border: 1px solid var(--gold-primary);
+    color: var(--gold-light);
+    font-size: 0.9rem;
+    white-space: nowrap;
+    border-radius: 12px;
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 20px rgba(212, 175, 55, 0.3);
+}
+
+.tooltip::after {
+    content: '';
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 8px solid transparent;
+    border-top-color: var(--gold-primary);
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.3s ease;
+}
+
+.tooltip:hover::before,
+.tooltip:hover::after {
+    opacity: 1;
+    transform: translateX(-50%) translateY(-8px);
+}
+
+/* ===== Gold Ripple Effect ===== */
+.ripple {
+    position: relative;
+    overflow: hidden;
+}
+
+.ripple::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba(212, 175, 55, 0.4);
+    transform: translate(-50%, -50%);
+    transition: width 0.6s, height 0.6s;
+}
+
+.ripple:active::after {
+    width: 300%;
+    height: 300%;
+}
+
+/* ===== Gold Progress Bar ===== */
+.scroll-progress {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 3px;
+    background: linear-gradient(90deg, #D4AF37, #FFD700, #F4E4C1);
+    z-index: 9999;
+    transform-origin: left;
+    box-shadow: 0 0 20px rgba(212, 175, 55, 0.5);
+    animation: goldFlow 3s ease infinite;
+    background-size: 200% 200%;
+}
+
+@keyframes goldFlow {
+
+    0%,
+    100% {
+        background-position: 0% 50%;
+    }
+
+    50% {
+        background-position: 100% 50%;
+    }
+}
+
+/* ===== Mobile Dark Optimizations ===== */
+@media (max-width: 768px) {
+    .glass-card {
+        backdrop-filter: blur(10px);
+    }
+
+    .card-3d:hover {
+        transform: scale(1.02);
+    }
+
+    .hero-bg-animated .shape {
+        opacity: 0.1;
+    }
+
+    .counter-number {
+        font-size: 2.5rem;
+    }
+}
+
+/* ===== Reduced Motion Support ===== */
+@media (prefers-reduced-motion: reduce) {
+
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+/* ===== Dark Theme Specific Glow Effects ===== */
+.glow-gold {
+    box-shadow: 0 0 20px rgba(212, 175, 55, 0.3),
+        0 0 40px rgba(212, 175, 55, 0.2),
+        0 0 60px rgba(212, 175, 55, 0.1);
+}
+
+.glow-gold-intense {
+    box-shadow: 0 0 30px rgba(212, 175, 55, 0.5),
+        0 0 60px rgba(212, 175, 55, 0.3),
+        0 0 90px rgba(212, 175, 55, 0.2);
+    animation: pulseGlow 2s ease-in-out infinite;
+}
+
+@keyframes pulseGlow {
+
+    0%,
+    100% {
+        box-shadow: 0 0 30px rgba(212, 175, 55, 0.5),
+            0 0 60px rgba(212, 175, 55, 0.3),
+            0 0 90px rgba(212, 175, 55, 0.2);
+    }
+
+    50% {
+        box-shadow: 0 0 40px rgba(212, 175, 55, 0.7),
+            0 0 80px rgba(212, 175, 55, 0.4),
+            0 0 120px rgba(212, 175, 55, 0.3);
+    }
+}
