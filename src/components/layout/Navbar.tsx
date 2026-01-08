@@ -2,7 +2,8 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { Menu, X, Sparkles, User, LogIn } from 'lucide-react';
+import Image from 'next/image';
+import { Menu, X, User, LogIn } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 
 export default function Navbar() {
@@ -39,17 +40,15 @@ export default function Navbar() {
             <div className="container-custom">
                 <div className="flex items-center justify-between h-20">
                     {/* Logo */}
-                    <Link href="/" className="flex items-center space-x-3 group">
-                        <div className="relative">
-                            <Sparkles className="w-8 h-8 text-primary-500 group-hover:text-primary-400 transition-colors" />
-                            <div className="absolute inset-0 bg-primary-500 blur-xl opacity-50 group-hover:opacity-75 transition-opacity" />
-                        </div>
-                        <span className="text-2xl font-bold gradient-text hidden sm:block">
-                            Liguns Entertain
-                        </span>
-                        <span className="text-2xl font-bold gradient-text sm:hidden">
-                            Liguns
-                        </span>
+                    <Link href="/" className="flex items-center group">
+                        <Image
+                            src="/logo.png"
+                            alt="Liguns Entertainment"
+                            width={50}
+                            height={50}
+                            className="group-hover:scale-105 transition-transform duration-300"
+                            priority
+                        />
                     </Link>
 
                     {/* Desktop Navigation */}
