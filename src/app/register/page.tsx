@@ -1,611 +1,285 @@
 'use client';
 
 import { useState } from 'react';
-import { motion } from 'motion/react';
-import {
-    User,
-    Mail,
-    Phone,
-    MapPin,
-    Calendar,
-    Upload,
-    Check,
-    Lock,
-    Ruler,
-    Weight,
-    UserCircle,
-    ArrowRight,
-    ArrowLeft,
-    AlertCircle,
-} from 'lucide-react';
+import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import Image from 'next/image';
+import { motion } from 'motion/react';
+import { User, Phone, MapPin, Building2, Briefcase, ChevronRight, AlertCircle, CheckCircle } from 'lucide-react';
+
+const venues = [
+    'Venetian Havana',
+    'Denver Club',
+    'Denver Spa',
+    'Vender Club',
+    '80 Spa',
+    'Saga Vigour',
+    'Sultan Spa',
+    'LIV Club',
+    'Heritage'
+];
+
+const positions = [
+    'Ladies Karaoke (LC)',
+    'Terapis Spa',
+    'Hostess',
+    'Waitress',
+    'Admin/Staff',
+    'Security'
+];
 
 export default function RegisterPage() {
-    const [currentStep, setCurrentStep] = useState(1);
+    const router = useRouter();
+    const [isLoading, setIsLoading] = useState(false);
+    const [error, setError] = useState('');
+    const [success, setSuccess] = useState('');
     const [formData, setFormData] = useState({
-        // Step 1: Account Info
-        email: '',
-        password: '',
-        confirmPassword: '',
-        // Step 2: Personal Info
         fullName: '',
+        nickname: '',
         phone: '',
-        birthDate: '',
-        address: '',
-        // Step 3: Physical Info
-        height: '',
-        weight: '',
-        emergencyContact: '',
-        // Step 4: Photo
-        photo: null as File | null,
+        position: '',
+        venue: ''
     });
 
-    const [errors, setErrors] = useState<Record<string, string>>({});
-    const [photoPreview, setPhotoPreview] = useState<string>('');
-
-    const totalSteps = 4;
-
-    const handleInputChange = (
-        e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-    ) => {
-        const { name, value } = e.target;
-        setFormData((prev) => ({ ...prev, [name]: value }));
-        // Clear error when user types
-        if (errors[name]) {
-            setErrors((prev) => ({ ...prev, [name]: '' }));
-        }
-    };
-
-    const handlePhotoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const file = e.target.files?.[0];
-        if (file) {
-            setFormData((prev) => ({ ...prev, photo: file }));
-            const reader = new FileReader();
-            reader.onloadend = () => {
-                setPhotoPreview(reader.result as string);
-            };
-            reader.readAsDataURL(file);
-        }
-    };
-
-    const validateStep = (step: number): boolean => {
-        const newErrors: Record<string, string> = {};
-
-        switch (step) {
-            case 1:
-                if (!formData.email) newErrors.email = 'Email wajib diisi';
-                else if (!/\S+@\S+\.\S+/.test(formData.email))
-                    newErrors.email = 'Format email tidak valid';
-                if (!formData.password) newErrors.password = 'Password wajib diisi';
-                else if (formData.password.length < 6)
-                    newErrors.password = 'Password minimal 6 karakter';
-                if (formData.password !== formData.confirmPassword)
-                    newErrors.confirmPassword = 'Password tidak cocok';
-                break;
-
-            case 2:
-                if (!formData.fullName) newErrors.fullName = 'Nama lengkap wajib diisi';
-                if (!formData.phone) newErrors.phone = 'Nomor telepon wajib diisi';
-                if (!formData.birthDate)
-                    newErrors.birthDate = 'Tanggal lahir wajib diisi';
-                if (!formData.address) newErrors.address = 'Alamat wajib diisi';
-                break;
-
-            case 3:
-                if (!formData.height) newErrors.height = 'Tinggi badan wajib diisi';
-                else if (parseInt(formData.height) < 150 || parseInt(formData.height) > 200)
-                    newErrors.height = 'Tinggi badan harus antara 150-200 cm';
-                if (!formData.weight) newErrors.weight = 'Berat badan wajib diisi';
-                else if (parseInt(formData.weight) < 40 || parseInt(formData.weight) > 100)
-                    newErrors.weight = 'Berat badan harus antara 40-100 kg';
-                if (!formData.emergencyContact)
-                    newErrors.emergencyContact = 'Kontak darurat wajib diisi';
-                break;
-
-            case 4:
-                if (!formData.photo) newErrors.photo = 'Foto wajib diupload';
-                break;
-        }
-
-        setErrors(newErrors);
-        return Object.keys(newErrors).length === 0;
-    };
-
-    const handleNext = () => {
-        if (validateStep(currentStep)) {
-            setCurrentStep((prev) => Math.min(prev + 1, totalSteps));
-        }
-    };
-
-    const handlePrevious = () => {
-        setCurrentStep((prev) => Math.max(prev - 1, 1));
-    };
-
-    const handleSubmit = async (e: React.FormEvent) => {
+    const handleRegister = (e: React.FormEvent) => {
         e.preventDefault();
-        if (validateStep(currentStep)) {
-            // TODO: Implement Supabase registration
-            console.log('Form submitted:', formData);
-            alert(
-                'Pendaftaran berhasil! (Akan terintegrasi dengan Supabase di tahap selanjutnya)'
-            );
+        setError('');
+        setSuccess('');
+
+        // Basic validation
+        if (!formData.fullName || !formData.nickname || !formData.venue || !formData.position) {
+            setError('Mohon lengkapi semua data wajib.');
+            return;
         }
+
+        setIsLoading(true);
+
+        setTimeout(() => {
+            try {
+                // Get existing members
+                const existingMembersStr = localStorage.getItem('members');
+                const existingMembers = existingMembersStr ? JSON.parse(existingMembersStr) : [];
+
+                // Check for duplicates (simplified check on nickname + venue)
+                const isDuplicate = existingMembers.some((m: any) =>
+                    m.nickname.toLowerCase() === formData.nickname.toLowerCase() &&
+                    m.venue === formData.venue
+                );
+
+                if (isDuplicate) {
+                    setError('Nama panggilan ini sudah terdaftar di lokasi yang sama. Silakan gunakan nama lain atau hubungi admin.');
+                    setIsLoading(false);
+                    return;
+                }
+
+                // Add new member
+                const newMember = {
+                    id: Date.now(),
+                    ...formData,
+                    role: 'member',
+                    joinedDate: new Date().toISOString()
+                };
+
+                const updatedMembers = [...existingMembers, newMember];
+                localStorage.setItem('members', JSON.stringify(updatedMembers));
+
+                setSuccess('Pendaftaran berhasil! Mengalihkan ke halaman login...');
+
+                // Redirect after brief delay
+                setTimeout(() => {
+                    router.push('/login');
+                }, 1500);
+
+            } catch (err) {
+                setError('Terjadi kesalahan saat menyimpan data. Silakan coba lagi.');
+            } finally {
+                setIsLoading(false);
+            }
+        }, 1500);
     };
 
     return (
-        <div className="min-h-screen pt-24 pb-16">
-            <div className="container-custom max-w-4xl">
+        <div className="min-h-screen flex items-center justify-center relative overflow-hidden bg-black py-10">
+            {/* Background Effects */}
+            <div className="absolute inset-0 z-0 h-full">
+                <div className="absolute top-[-10%] right-[-10%] w-[600px] h-[600px] bg-purple-900/10 rounded-full blur-[120px]" />
+                <div className="absolute bottom-[-10%] left-[-10%] w-[500px] h-[500px] bg-gold-500/10 rounded-full blur-[100px]" />
+                <div className="absolute inset-0 bg-[url('/pattern.png')] opacity-5 mix-blend-overlay" />
+            </div>
+
+            <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5 }}
+                className="w-full max-w-lg p-6 relative z-10"
+            >
                 {/* Header */}
-                <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    className="text-center mb-12"
-                >
-                    <h1 className="heading-primary mb-4">Daftar Anggota Baru</h1>
-                    <p className="text-gray-400 text-lg">
-                        Bergabunglah dengan ribuan member sukses kami
-                    </p>
-                </motion.div>
+                <div className="text-center mb-8">
+                    <Link href="/" className="inline-block group">
+                        <Image
+                            src="/logo.png"
+                            alt="Liguns Entertainment"
+                            width={70}
+                            height={70}
+                            className="mx-auto mb-4 group-hover:scale-105 transition-transform duration-300 drop-shadow-[0_0_15px_rgba(234,179,8,0.3)]"
+                        />
+                    </Link>
+                    <h1 className="text-2xl font-bold text-white">
+                        Bergabung Tim Liguns
+                    </h1>
+                    <p className="text-gray-400 mt-2 text-sm">Isi formulir di bawah untuk mendaftar sebagai karyawan</p>
+                </div>
 
-                {/* Progress Steps */}
-                <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.2 }}
-                    className="mb-12"
-                >
-                    <div className="flex items-center justify-between">
-                        {[1, 2, 3, 4].map((step) => (
-                            <div key={step} className="flex items-center flex-1">
-                                <div className="flex flex-col items-center relative flex-1">
-                                    <div
-                                        className={`w-12 h-12 rounded-full flex items-center justify-center font-bold transition-all ${step < currentStep
-                                            ? 'bg-green-500 text-white'
-                                            : step === currentStep
-                                                ? 'bg-primary-500 text-white'
-                                                : 'bg-white/10 text-gray-500'
-                                            }`}
-                                    >
-                                        {step < currentStep ? (
-                                            <Check className="w-6 h-6" />
-                                        ) : (
-                                            step
-                                        )}
-                                    </div>
-                                    <span
-                                        className={`text-sm mt-2 hidden sm:block ${step <= currentStep ? 'text-white' : 'text-gray-500'
-                                            }`}
-                                    >
-                                        {step === 1 && 'Akun'}
-                                        {step === 2 && 'Data Pribadi'}
-                                        {step === 3 && 'Fisik'}
-                                        {step === 4 && 'Foto'}
-                                    </span>
-                                </div>
-                                {step < 4 && (
-                                    <div
-                                        className={`h-1 flex-1 mx-2 ${step < currentStep ? 'bg-green-500' : 'bg-white/10'
-                                            }`}
-                                    />
-                                )}
+                {/* Register Form */}
+                <div className="glass p-8 rounded-2xl border border-white/10 backdrop-blur-xl">
+                    <form onSubmit={handleRegister} className="space-y-5">
+                        {error && (
+                            <motion.div
+                                initial={{ opacity: 0, height: 0 }}
+                                animate={{ opacity: 1, height: 'auto' }}
+                                className="bg-red-500/10 border border-red-500/20 rounded-lg p-3 flex items-center gap-3 text-red-200 text-sm"
+                            >
+                                <AlertCircle className="w-4 h-4 shrink-0" />
+                                <p>{error}</p>
+                            </motion.div>
+                        )}
+                        {success && (
+                            <motion.div
+                                initial={{ opacity: 0, height: 0 }}
+                                animate={{ opacity: 1, height: 'auto' }}
+                                className="bg-green-500/10 border border-green-500/20 rounded-lg p-3 flex items-center gap-3 text-green-200 text-sm"
+                            >
+                                <CheckCircle className="w-4 h-4 shrink-0" />
+                                <p>{success}</p>
+                            </motion.div>
+                        )}
+
+                        {/* Nama Lengkap */}
+                        <div>
+                            <label className="block text-sm font-medium text-gray-300 mb-1.5 ml-1">Nama Lengkap (Sesuai KTP)</label>
+                            <div className="relative group">
+                                <User className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500 group-focus-within:text-gold-500 transition-colors" />
+                                <input
+                                    type="text"
+                                    required
+                                    value={formData.fullName}
+                                    onChange={(e) => setFormData({ ...formData, fullName: e.target.value })}
+                                    className="w-full pl-12 pr-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder:text-gray-600 focus:outline-none focus:border-gold-500/50 focus:bg-white/10 transition-all font-medium"
+                                    placeholder="Contoh: Muachamad Guntur Murdiansyah"
+                                />
                             </div>
-                        ))}
-                    </div>
-                </motion.div>
-
-                {/* Form */}
-                <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.4 }}
-                    className="glass-card p-8"
-                >
-                    <form onSubmit={handleSubmit}>
-                        {/* Step 1: Account Info */}
-                        {currentStep === 1 && (
-                            <motion.div
-                                initial={{ opacity: 0, x: 20 }}
-                                animate={{ opacity: 1, x: 0 }}
-                                exit={{ opacity: 0, x: -20 }}
-                                className="space-y-6"
-                            >
-                                <h2 className="text-2xl font-bold text-white mb-6">
-                                    Informasi Akun
-                                </h2>
-
-                                <div>
-                                    <label className="block text-gray-300 mb-2">
-                                        Email <span className="text-red-400">*</span>
-                                    </label>
-                                    <div className="relative">
-                                        <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-                                        <input
-                                            type="email"
-                                            name="email"
-                                            value={formData.email}
-                                            onChange={handleInputChange}
-                                            className="input-premium pl-12"
-                                            placeholder="email@example.com"
-                                        />
-                                    </div>
-                                    {errors.email && (
-                                        <p className="text-red-400 text-sm mt-1 flex items-center">
-                                            <AlertCircle className="w-4 h-4 mr-1" />
-                                            {errors.email}
-                                        </p>
-                                    )}
-                                </div>
-
-                                <div>
-                                    <label className="block text-gray-300 mb-2">
-                                        Password <span className="text-red-400">*</span>
-                                    </label>
-                                    <div className="relative">
-                                        <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-                                        <input
-                                            type="password"
-                                            name="password"
-                                            value={formData.password}
-                                            onChange={handleInputChange}
-                                            className="input-premium pl-12"
-                                            placeholder="Minimal 6 karakter"
-                                        />
-                                    </div>
-                                    {errors.password && (
-                                        <p className="text-red-400 text-sm mt-1 flex items-center">
-                                            <AlertCircle className="w-4 h-4 mr-1" />
-                                            {errors.password}
-                                        </p>
-                                    )}
-                                </div>
-
-                                <div>
-                                    <label className="block text-gray-300 mb-2">
-                                        Konfirmasi Password <span className="text-red-400">*</span>
-                                    </label>
-                                    <div className="relative">
-                                        <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-                                        <input
-                                            type="password"
-                                            name="confirmPassword"
-                                            value={formData.confirmPassword}
-                                            onChange={handleInputChange}
-                                            className="input-premium pl-12"
-                                            placeholder="Masukkan ulang password"
-                                        />
-                                    </div>
-                                    {errors.confirmPassword && (
-                                        <p className="text-red-400 text-sm mt-1 flex items-center">
-                                            <AlertCircle className="w-4 h-4 mr-1" />
-                                            {errors.confirmPassword}
-                                        </p>
-                                    )}
-                                </div>
-                            </motion.div>
-                        )}
-
-                        {/* Step 2: Personal Info */}
-                        {currentStep === 2 && (
-                            <motion.div
-                                initial={{ opacity: 0, x: 20 }}
-                                animate={{ opacity: 1, x: 0 }}
-                                exit={{ opacity: 0, x: -20 }}
-                                className="space-y-6"
-                            >
-                                <h2 className="text-2xl font-bold text-white mb-6">
-                                    Data Pribadi
-                                </h2>
-
-                                <div>
-                                    <label className="block text-gray-300 mb-2">
-                                        Nama Lengkap <span className="text-red-400">*</span>
-                                    </label>
-                                    <div className="relative">
-                                        <User className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-                                        <input
-                                            type="text"
-                                            name="fullName"
-                                            value={formData.fullName}
-                                            onChange={handleInputChange}
-                                            className="input-premium pl-12"
-                                            placeholder="Nama lengkap sesuai KTP"
-                                        />
-                                    </div>
-                                    {errors.fullName && (
-                                        <p className="text-red-400 text-sm mt-1 flex items-center">
-                                            <AlertCircle className="w-4 h-4 mr-1" />
-                                            {errors.fullName}
-                                        </p>
-                                    )}
-                                </div>
-
-                                <div>
-                                    <label className="block text-gray-300 mb-2">
-                                        Nomor Telepon <span className="text-red-400">*</span>
-                                    </label>
-                                    <div className="relative">
-                                        <Phone className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-                                        <input
-                                            type="tel"
-                                            name="phone"
-                                            value={formData.phone}
-                                            onChange={handleInputChange}
-                                            className="input-premium pl-12"
-                                            placeholder="08123456789"
-                                        />
-                                    </div>
-                                    {errors.phone && (
-                                        <p className="text-red-400 text-sm mt-1 flex items-center">
-                                            <AlertCircle className="w-4 h-4 mr-1" />
-                                            {errors.phone}
-                                        </p>
-                                    )}
-                                </div>
-
-                                <div>
-                                    <label className="block text-gray-300 mb-2">
-                                        Tanggal Lahir <span className="text-red-400">*</span>
-                                    </label>
-                                    <div className="relative">
-                                        <Calendar className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-                                        <input
-                                            type="date"
-                                            name="birthDate"
-                                            value={formData.birthDate}
-                                            onChange={handleInputChange}
-                                            className="input-premium pl-12"
-                                        />
-                                    </div>
-                                    {errors.birthDate && (
-                                        <p className="text-red-400 text-sm mt-1 flex items-center">
-                                            <AlertCircle className="w-4 h-4 mr-1" />
-                                            {errors.birthDate}
-                                        </p>
-                                    )}
-                                </div>
-
-                                <div>
-                                    <label className="block text-gray-300 mb-2">
-                                        Alamat Lengkap <span className="text-red-400">*</span>
-                                    </label>
-                                    <div className="relative">
-                                        <MapPin className="absolute left-4 top-4 w-5 h-5 text-gray-400" />
-                                        <textarea
-                                            name="address"
-                                            value={formData.address}
-                                            onChange={handleInputChange}
-                                            rows={3}
-                                            className="input-premium pl-12"
-                                            placeholder="Alamat lengkap sesuai KTP"
-                                        />
-                                    </div>
-                                    {errors.address && (
-                                        <p className="text-red-400 text-sm mt-1 flex items-center">
-                                            <AlertCircle className="w-4 h-4 mr-1" />
-                                            {errors.address}
-                                        </p>
-                                    )}
-                                </div>
-                            </motion.div>
-                        )}
-
-                        {/* Step 3: Physical Info */}
-                        {currentStep === 3 && (
-                            <motion.div
-                                initial={{ opacity: 0, x: 20 }}
-                                animate={{ opacity: 1, x: 0 }}
-                                exit={{ opacity: 0, x: -20 }}
-                                className="space-y-6"
-                            >
-                                <h2 className="text-2xl font-bold text-white mb-6">
-                                    Data Fisik
-                                </h2>
-
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                    <div>
-                                        <label className="block text-gray-300 mb-2">
-                                            Tinggi Badan (cm) <span className="text-red-400">*</span>
-                                        </label>
-                                        <div className="relative">
-                                            <Ruler className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-                                            <input
-                                                type="number"
-                                                name="height"
-                                                value={formData.height}
-                                                onChange={handleInputChange}
-                                                className="input-premium pl-12"
-                                                placeholder="160"
-                                                min="150"
-                                                max="200"
-                                            />
-                                        </div>
-                                        {errors.height && (
-                                            <p className="text-red-400 text-sm mt-1 flex items-center">
-                                                <AlertCircle className="w-4 h-4 mr-1" />
-                                                {errors.height}
-                                            </p>
-                                        )}
-                                    </div>
-
-                                    <div>
-                                        <label className="block text-gray-300 mb-2">
-                                            Berat Badan (kg) <span className="text-red-400">*</span>
-                                        </label>
-                                        <div className="relative">
-                                            <Weight className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-                                            <input
-                                                type="number"
-                                                name="weight"
-                                                value={formData.weight}
-                                                onChange={handleInputChange}
-                                                className="input-premium pl-12"
-                                                placeholder="50"
-                                                min="40"
-                                                max="100"
-                                            />
-                                        </div>
-                                        {errors.weight && (
-                                            <p className="text-red-400 text-sm mt-1 flex items-center">
-                                                <AlertCircle className="w-4 h-4 mr-1" />
-                                                {errors.weight}
-                                            </p>
-                                        )}
-                                    </div>
-                                </div>
-
-                                <div>
-                                    <label className="block text-gray-300 mb-2">
-                                        Kontak Darurat <span className="text-red-400">*</span>
-                                    </label>
-                                    <div className="relative">
-                                        <UserCircle className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-                                        <input
-                                            type="tel"
-                                            name="emergencyContact"
-                                            value={formData.emergencyContact}
-                                            onChange={handleInputChange}
-                                            className="input-premium pl-12"
-                                            placeholder="Nomor keluarga yang dapat dihubungi"
-                                        />
-                                    </div>
-                                    {errors.emergencyContact && (
-                                        <p className="text-red-400 text-sm mt-1 flex items-center">
-                                            <AlertCircle className="w-4 h-4 mr-1" />
-                                            {errors.emergencyContact}
-                                        </p>
-                                    )}
-                                </div>
-                            </motion.div>
-                        )}
-
-                        {/* Step 4: Photo Upload */}
-                        {currentStep === 4 && (
-                            <motion.div
-                                initial={{ opacity: 0, x: 20 }}
-                                animate={{ opacity: 1, x: 0 }}
-                                exit={{ opacity: 0, x: -20 }}
-                                className="space-y-6"
-                            >
-                                <h2 className="text-2xl font-bold text-white mb-6">
-                                    Upload Foto
-                                </h2>
-
-                                <div>
-                                    <label className="block text-gray-300 mb-4">
-                                        Foto Diri <span className="text-red-400">*</span>
-                                    </label>
-                                    <div
-                                        className={`border-2 border-dashed rounded-2xl p-8 text-center ${photoPreview
-                                            ? 'border-primary-500 bg-primary-500/10'
-                                            : 'border-white/20 bg-white/5 hover:border-primary-500 hover:bg-white/10'
-                                            } transition-all`}
-                                    >
-                                        {photoPreview ? (
-                                            <div className="space-y-4">
-                                                <img
-                                                    src={photoPreview}
-                                                    alt="Preview"
-                                                    className="w-48 h-48 object-cover rounded-xl mx-auto"
-                                                />
-                                                <button
-                                                    type="button"
-                                                    onClick={() => {
-                                                        setPhotoPreview('');
-                                                        setFormData((prev) => ({ ...prev, photo: null }));
-                                                    }}
-                                                    className="btn-secondary text-sm"
-                                                >
-                                                    Ganti Foto
-                                                </button>
-                                            </div>
-                                        ) : (
-                                            <label className="cursor-pointer block">
-                                                <Upload className="w-16 h-16 mx-auto text-gray-400 mb-4" />
-                                                <p className="text-white font-semibold mb-2">
-                                                    Klik untuk upload foto
-                                                </p>
-                                                <p className="text-gray-400 text-sm mb-4">
-                                                    Format: JPG, PNG (Maks. 5MB)
-                                                </p>
-                                                <input
-                                                    type="file"
-                                                    accept="image/*"
-                                                    onChange={handlePhotoChange}
-                                                    className="hidden"
-                                                />
-                                                <span className="btn-secondary inline-block">
-                                                    Pilih Foto
-                                                </span>
-                                            </label>
-                                        )}
-                                    </div>
-                                    {errors.photo && (
-                                        <p className="text-red-400 text-sm mt-2 flex items-center">
-                                            <AlertCircle className="w-4 h-4 mr-1" />
-                                            {errors.photo}
-                                        </p>
-                                    )}
-                                    <p className="text-gray-400 text-sm mt-4">
-                                        💡 Tips: Gunakan foto close-up dengan wajah terlihat jelas
-                                        dan latar belakang yang rapi
-                                    </p>
-                                </div>
-                            </motion.div>
-                        )}
-
-                        {/* Navigation Buttons */}
-                        <div className="flex items-center justify-between mt-12 pt-6 border-t border-white/10">
-                            <button
-                                type="button"
-                                onClick={handlePrevious}
-                                disabled={currentStep === 1}
-                                className={`btn-secondary flex items-center space-x-2 ${currentStep === 1 ? 'opacity-50 cursor-not-allowed' : ''
-                                    }`}
-                            >
-                                <ArrowLeft className="w-5 h-5" />
-                                <span>Sebelumnya</span>
-                            </button>
-
-                            {currentStep < totalSteps ? (
-                                <button
-                                    type="button"
-                                    onClick={handleNext}
-                                    className="btn-primary flex items-center space-x-2"
-                                >
-                                    <span>Selanjutnya</span>
-                                    <ArrowRight className="w-5 h-5" />
-                                </button>
-                            ) : (
-                                <button
-                                    type="submit"
-                                    className="btn-primary flex items-center space-x-2"
-                                >
-                                    <Check className="w-5 h-5" />
-                                    <span>Daftar Sekarang</span>
-                                </button>
-                            )}
                         </div>
-                    </form>
-                </motion.div>
 
-                {/* Login Link */}
-                <motion.div
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ delay: 0.6 }}
-                    className="text-center mt-8"
-                >
-                    <p className="text-gray-400">
-                        Sudah punya akun?{' '}
-                        <Link
-                            href="/login"
-                            className="text-primary-400 hover:text-primary-300 font-semibold"
+                        <div className="grid grid-cols-2 gap-4">
+                            {/* Nama Panggilan */}
+                            <div>
+                                <label className="block text-sm font-medium text-gray-300 mb-1.5 ml-1">Nama Panggilan</label>
+                                <div className="relative group">
+                                    <User className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500 group-focus-within:text-gold-500 transition-colors" />
+                                    <input
+                                        type="text"
+                                        required
+                                        value={formData.nickname}
+                                        onChange={(e) => setFormData({ ...formData, nickname: e.target.value })}
+                                        className="w-full pl-12 pr-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder:text-gray-600 focus:outline-none focus:border-gold-500/50 focus:bg-white/10 transition-all font-medium"
+                                        placeholder="Cth: Guntur"
+                                    />
+                                </div>
+                            </div>
+
+                            {/* Nomor HP */}
+                            <div>
+                                <label className="block text-sm font-medium text-gray-300 mb-1.5 ml-1">No. WhatsApp</label>
+                                <div className="relative group">
+                                    <Phone className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500 group-focus-within:text-gold-500 transition-colors" />
+                                    <input
+                                        type="tel"
+                                        value={formData.phone}
+                                        onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                                        className="w-full pl-12 pr-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder:text-gray-600 focus:outline-none focus:border-gold-500/50 focus:bg-white/10 transition-all font-medium"
+                                        placeholder="0812..."
+                                    />
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Posisi & Penempatan */}
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label className="block text-sm font-medium text-gray-300 mb-1.5 ml-1">Posisi / Role</label>
+                                <div className="relative group">
+                                    <Briefcase className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500 group-focus-within:text-gold-500 transition-colors" />
+                                    <select
+                                        required
+                                        value={formData.position}
+                                        onChange={(e) => setFormData({ ...formData, position: e.target.value })}
+                                        className="w-full pl-12 pr-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white focus:outline-none focus:border-gold-500/50 focus:bg-white/10 transition-all font-medium appearance-none cursor-pointer"
+                                    >
+                                        <option value="" className="bg-[#111] text-gray-500">Pilih Posisi</option>
+                                        {positions.map(p => (
+                                            <option key={p} value={p} className="bg-[#111] text-white py-2">{p}</option>
+                                        ))}
+                                    </select>
+                                    <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none">
+                                        <div className="w-0 h-0 border-l-[5px] border-l-transparent border-r-[5px] border-r-transparent border-t-[6px] border-t-gray-500"></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div>
+                                <label className="block text-sm font-medium text-gray-300 mb-1.5 ml-1">Penempatan</label>
+                                <div className="relative group">
+                                    <Building2 className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500 group-focus-within:text-gold-500 transition-colors" />
+                                    <select
+                                        required
+                                        value={formData.venue}
+                                        onChange={(e) => setFormData({ ...formData, venue: e.target.value })}
+                                        className="w-full pl-12 pr-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white focus:outline-none focus:border-gold-500/50 focus:bg-white/10 transition-all font-medium appearance-none cursor-pointer"
+                                    >
+                                        <option value="" className="bg-[#111] text-gray-500">Pilih Venue</option>
+                                        {venues.map(v => (
+                                            <option key={v} value={v} className="bg-[#111] text-white py-2">{v}</option>
+                                        ))}
+                                    </select>
+                                    <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none">
+                                        <div className="w-0 h-0 border-l-[5px] border-l-transparent border-r-[5px] border-r-transparent border-t-[6px] border-t-gray-500"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <button
+                            type="submit"
+                            disabled={isLoading || !!success}
+                            className="w-full bg-gradient-to-r from-gold-400 to-gold-600 hover:from-gold-500 hover:to-gold-700 text-black font-bold py-3.5 rounded-xl shadow-lg shadow-gold-900/20 transform transition-all hover:scale-[1.02] active:scale-[0.98] flex items-center justify-center gap-2 mt-4"
                         >
+                            {isLoading ? (
+                                <div className="w-5 h-5 border-2 border-black/30 border-t-black rounded-full animate-spin" />
+                            ) : success ? (
+                                <>
+                                    <span>Berhasil Mendaftar</span>
+                                    <CheckCircle className="w-5 h-5" />
+                                </>
+                            ) : (
+                                <>
+                                    <span>Daftar Sekarang</span>
+                                    <ChevronRight className="w-5 h-5" />
+                                </>
+                            )}
+                        </button>
+                    </form>
+                </div>
+
+                {/* Footer Links */}
+                <div className="text-center mt-8 space-y-4">
+                    <p className="text-gray-400 text-sm">
+                        Sudah punya akun?{' '}
+                        <Link href="/login" className="text-gold-400 hover:text-gold-300 font-medium transition-colors">
                             Masuk di sini
                         </Link>
                     </p>
-                </motion.div>
-            </div>
+                </div>
+            </motion.div>
         </div>
     );
 }
