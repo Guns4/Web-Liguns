@@ -108,21 +108,21 @@ export default function HomePage() {
     return (
         <main className="min-h-screen">
             {/* ===== Hero Section ===== */}
-            <section className="relative min-h-[85vh] flex items-center overflow-hidden">
+            <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
                 {/* Animated Background Shapes */}
                 <div className="absolute inset-0">
-                    <div className="absolute top-20 left-10 w-72 h-72 bg-gold-500/10 rounded-full blur-[100px] animate-pulse" />
-                    <div className="absolute top-40 right-20 w-96 h-96 bg-gold-500/5 rounded-full blur-[120px] animate-pulse" style={{ animationDelay: '1s' }} />
-                    <div className="absolute bottom-20 left-1/3 w-80 h-80 bg-gold-500/10 rounded-full blur-[100px] animate-pulse" style={{ animationDelay: '2s' }} />
+                    <div className="absolute top-1/4 left-10 w-72 h-72 bg-gold-500/10 rounded-full blur-[100px] animate-pulse" />
+                    <div className="absolute top-1/3 right-20 w-96 h-96 bg-gold-500/5 rounded-full blur-[120px] animate-pulse" style={{ animationDelay: '1s' }} />
+                    <div className="absolute bottom-1/4 left-1/3 w-80 h-80 bg-gold-500/10 rounded-full blur-[100px] animate-pulse" style={{ animationDelay: '2s' }} />
                 </div>
 
-                <div className="container-custom relative z-10 py-20">
-                    {/* Hero Text - Centered */}
+                <div className="container-custom relative z-10">
+                    {/* Hero Text - Perfectly Centered */}
                     <motion.div
                         initial={{ opacity: 0, y: 30 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.8 }}
-                        className="text-center max-w-4xl mx-auto"
+                        className="text-center"
                     >
                         <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold leading-tight mb-8">
                             Membangun Karier{' '}
@@ -130,13 +130,13 @@ export default function HomePage() {
                             <br />
                             di Industri Hiburan Malam
                         </h1>
-                        <p className="text-lg md:text-xl text-gray-400 mb-10 leading-relaxed max-w-3xl mx-auto">
+                        <p className="text-lg md:text-xl text-gray-400 mb-10 leading-relaxed max-w-3xl mx-auto px-4">
                             Liguns Entertainment adalah agency profesional berbasis di Kota Bandung yang
                             menghadirkan wadah aman, modern, dan elegan untuk penyaluran dan pengembangan
                             karier wanita muda di karaoke dan Terapis Spa. Kami juga menyediakan layanan
                             social media management & content creation.
                         </p>
-                        <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                        <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
                             <Link
                                 href="/register"
                                 className="inline-flex items-center justify-center gap-2 bg-gold-500 hover:bg-gold-600 text-black font-semibold px-10 py-4 rounded-xl transition-all duration-300 hover:scale-105 shadow-lg hover:shadow-gold-500/30 text-lg"
