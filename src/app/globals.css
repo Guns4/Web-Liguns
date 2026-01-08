@@ -1,0 +1,97 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+    :root {
+        /* --- COLOR PALETTE: LUXURY DARK --- */
+        /* Background: Deep Charcoal (Bukan hitam pekat, agar mata nyaman) */
+        --background: 240 10% 3.9%;
+        --foreground: 0 0% 98%;
+
+        /* Card: Sedikit lebih terang dari background untuk depth */
+        --card: 240 10% 6%;
+        --card-foreground: 0 0% 98%;
+
+        /* Popover/Modal */
+        --popover: 240 10% 3.9%;
+        --popover-foreground: 0 0% 98%;
+
+        /* PRIMARY: Metallic Gold (Warna Kunci Kemewahan) */
+        /* Hex: #D4AF37 -> HSL conversion approx */
+        --primary: 46 65% 52%;
+        --primary-foreground: 240 5.9% 10%;
+        /* Teks hitam di atas tombol emas */
+
+        /* Secondary: Muted Silver/Bronze */
+        --secondary: 240 3.7% 15.9%;
+        --secondary-foreground: 0 0% 98%;
+
+        /* Muted Text */
+        --muted: 240 3.7% 15.9%;
+        --muted-foreground: 240 5% 64.9%;
+
+        /* Accent & Borders */
+        --accent: 240 3.7% 15.9%;
+        --accent-foreground: 0 0% 98%;
+        --destructive: 0 62.8% 30.6%;
+        --destructive-foreground: 0 0% 98%;
+
+        /* Border halus, sedikit emas pudar */
+        --border: 240 3.7% 15.9%;
+        --input: 240 3.7% 15.9%;
+        --ring: 46 65% 52%;
+        /* Saat diklik, ring-nya warna emas */
+
+        --radius: 0.75rem;
+        /* Sudut membulat modern (12px) */
+    }
+}
+
+@layer base {
+    * {
+        @apply border-border;
+    }
+
+    body {
+        @apply bg-background text-foreground;
+        /* Font default yang elegan */
+        font-feature-settings: "rlig" 1, "calt" 1;
+    }
+}
+
+/* --- CUSTOM UTILITIES (Efek Premium) --- */
+@layer utilities {
+
+    /* Efek Kaca Buram (Glassmorphism) */
+    .glass {
+        @apply bg-black/40 backdrop-blur-md border border-white/10;
+    }
+
+    /* Efek Kaca Emas (Untuk Card Spesial) */
+    .glass-gold {
+        @apply bg-[#D4AF37]/10 backdrop-blur-md border border-[#D4AF37]/30;
+    }
+
+    /* Teks Emas Gradasi (Sangat Mewah untuk Judul) */
+    .text-gold-gradient {
+        @apply bg-clip-text text-transparent bg-gradient-to-r from-[#D4AF37] via-[#F8F3D4] to-[#D4AF37];
+    }
+
+    /* Animasi Halus */
+    .animate-fade-in {
+        animation: fadeIn 0.8s ease-out forwards;
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

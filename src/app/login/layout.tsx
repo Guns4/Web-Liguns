@@ -1,0 +1,14 @@
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+    title: 'Login',
+    description: 'Masuk ke akun Liguns Entertain Anda untuk mengakses dashboard dan fitur eksklusif.',
+};
+
+export default function LoginLayout({
+    children,
+}: {
+    children: React.ReactNode;
+}) {
+    return children;
+}

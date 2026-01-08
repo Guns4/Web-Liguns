@@ -1,0 +1,10 @@
+# Allow all search engines
+User-agent: *
+Allow: /
+
+# Disallow admin and private pages
+Disallow: /dashboard/
+Disallow: /api/
+
+# Sitemap location
+Sitemap: https://liguns-entertain.vercel.app/sitemap.xml
