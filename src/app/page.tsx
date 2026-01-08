@@ -2,7 +2,6 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
 import { motion } from 'motion/react';
 import {
     Shield,
@@ -109,7 +108,7 @@ export default function HomePage() {
     return (
         <main className="min-h-screen">
             {/* ===== Hero Section ===== */}
-            <section className="relative min-h-[90vh] flex items-center overflow-hidden">
+            <section className="relative min-h-[85vh] flex items-center overflow-hidden">
                 {/* Animated Background Shapes */}
                 <div className="absolute inset-0">
                     <div className="absolute top-20 left-10 w-72 h-72 bg-gold-500/10 rounded-full blur-[100px] animate-pulse" />
@@ -118,63 +117,42 @@ export default function HomePage() {
                 </div>
 
                 <div className="container-custom relative z-10 py-20">
-                    <div className="grid lg:grid-cols-2 gap-12 items-center">
-                        {/* Hero Text */}
-                        <motion.div
-                            initial={{ opacity: 0, x: -50 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            transition={{ duration: 0.8 }}
-                            className="text-center lg:text-left"
-                        >
-                            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight mb-6">
-                                Membangun Karier{' '}
-                                <span className="text-gold-gradient">Profesional</span> di Industri Hiburan Malam
-                            </h1>
-                            <p className="text-lg text-gray-400 mb-8 leading-relaxed">
-                                Liguns Entertainment adalah agency profesional berbasis di Kota Bandung yang
-                                menghadirkan wadah aman, modern, dan elegan untuk penyaluran dan pengembangan
-                                karier wanita muda di karaoke dan Terapis Spa. Kami juga menyediakan layanan
-                                social media management & content creation.
-                            </p>
-                            <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
-                                <Link
-                                    href="/register"
-                                    className="inline-flex items-center justify-center gap-2 bg-gold-500 hover:bg-gold-600 text-black font-semibold px-8 py-4 rounded-xl transition-all duration-300 hover:scale-105 shadow-lg hover:shadow-gold-500/30"
-                                >
-                                    <Users className="w-5 h-5" />
-                                    Gabung Sekarang
-                                </Link>
-                                <Link
-                                    href="/lowongan"
-                                    className="inline-flex items-center justify-center gap-2 glass px-8 py-4 rounded-xl font-semibold hover:bg-white/10 transition-all duration-300"
-                                >
-                                    <Briefcase className="w-5 h-5" />
-                                    Lihat Lowongan
-                                </Link>
-                            </div>
-                        </motion.div>
-
-                        {/* Hero Visual - Logo with glow effect */}
-                        <motion.div
-                            initial={{ opacity: 0, scale: 0.8 }}
-                            animate={{ opacity: 1, scale: 1 }}
-                            transition={{ duration: 0.8, delay: 0.2 }}
-                            className="hidden lg:flex items-center justify-center"
-                        >
-                            <div className="relative">
-                                {/* Glow effect */}
-                                <div className="absolute inset-0 bg-gold-500/20 blur-[80px] rounded-full scale-150" />
-                                <Image
-                                    src="/logo.png"
-                                    alt="Liguns Entertainment"
-                                    width={400}
-                                    height={400}
-                                    className="relative z-10 drop-shadow-2xl"
-                                    priority
-                                />
-                            </div>
-                        </motion.div>
-                    </div>
+                    {/* Hero Text - Centered */}
+                    <motion.div
+                        initial={{ opacity: 0, y: 30 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.8 }}
+                        className="text-center max-w-4xl mx-auto"
+                    >
+                        <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold leading-tight mb-8">
+                            Membangun Karier{' '}
+                            <span className="text-gold-gradient">Profesional</span>
+                            <br />
+                            di Industri Hiburan Malam
+                        </h1>
+                        <p className="text-lg md:text-xl text-gray-400 mb-10 leading-relaxed max-w-3xl mx-auto">
+                            Liguns Entertainment adalah agency profesional berbasis di Kota Bandung yang
+                            menghadirkan wadah aman, modern, dan elegan untuk penyaluran dan pengembangan
+                            karier wanita muda di karaoke dan Terapis Spa. Kami juga menyediakan layanan
+                            social media management & content creation.
+                        </p>
+                        <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                            <Link
+                                href="/register"
+                                className="inline-flex items-center justify-center gap-2 bg-gold-500 hover:bg-gold-600 text-black font-semibold px-10 py-4 rounded-xl transition-all duration-300 hover:scale-105 shadow-lg hover:shadow-gold-500/30 text-lg"
+                            >
+                                <Users className="w-5 h-5" />
+                                Gabung Sekarang
+                            </Link>
+                            <Link
+                                href="/lowongan"
+                                className="inline-flex items-center justify-center gap-2 glass px-10 py-4 rounded-xl font-semibold hover:bg-white/10 transition-all duration-300 text-lg"
+                            >
+                                <Briefcase className="w-5 h-5" />
+                                Lihat Lowongan
+                            </Link>
+                        </div>
+                    </motion.div>
                 </div>
             </section>
 
