@@ -1,11 +1,9 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
 
 @layer base {
     :root {
         /* --- COLOR PALETTE: LUXURY DARK --- */
-        /* Background: Deep Charcoal (Bukan hitam pekat, agar mata nyaman) */
+        /* Background: Deep Charcoal */
         --background: 240 10% 3.9%;
         --foreground: 0 0% 98%;
 
@@ -17,11 +15,9 @@
         --popover: 240 10% 3.9%;
         --popover-foreground: 0 0% 98%;
 
-        /* PRIMARY: Metallic Gold (Warna Kunci Kemewahan) */
-        /* Hex: #D4AF37 -> HSL conversion approx */
+        /* PRIMARY: Metallic Gold */
         --primary: 46 65% 52%;
         --primary-foreground: 240 5.9% 10%;
-        /* Teks hitam di atas tombol emas */
 
         /* Secondary: Muted Silver/Bronze */
         --secondary: 240 3.7% 15.9%;
@@ -37,25 +33,23 @@
         --destructive: 0 62.8% 30.6%;
         --destructive-foreground: 0 0% 98%;
 
-        /* Border halus, sedikit emas pudar */
+        /* Border halus */
         --border: 240 3.7% 15.9%;
         --input: 240 3.7% 15.9%;
         --ring: 46 65% 52%;
-        /* Saat diklik, ring-nya warna emas */
 
         --radius: 0.75rem;
-        /* Sudut membulat modern (12px) */
     }
 }
 
 @layer base {
     * {
-        @apply border-border;
+        border-color: hsl(var(--border));
     }
 
     body {
-        @apply bg-background text-foreground;
-        /* Font default yang elegan */
+        background-color: hsl(var(--background));
+        color: hsl(var(--foreground));
         font-feature-settings: "rlig" 1, "calt" 1;
     }
 }
@@ -65,17 +59,26 @@
 
     /* Efek Kaca Buram (Glassmorphism) */
     .glass {
-        @apply bg-black/40 backdrop-blur-md border border-white/10;
+        background-color: rgba(0, 0, 0, 0.4);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
     }
 
     /* Efek Kaca Emas (Untuk Card Spesial) */
     .glass-gold {
-        @apply bg-[#D4AF37]/10 backdrop-blur-md border border-[#D4AF37]/30;
+        background-color: rgba(212, 175, 55, 0.1);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border: 1px solid rgba(212, 175, 55, 0.3);
     }
 
-    /* Teks Emas Gradasi (Sangat Mewah untuk Judul) */
+    /* Teks Emas Gradasi */
     .text-gold-gradient {
-        @apply bg-clip-text text-transparent bg-gradient-to-r from-[#D4AF37] via-[#F8F3D4] to-[#D4AF37];
+        background-image: linear-gradient(to right, #D4AF37, #F8F3D4, #D4AF37);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
     }
 
     /* Animasi Halus */
@@ -94,4 +97,29 @@
         opacity: 1;
         transform: translateY(0);
     }
+}
+
+/* Custom color utilities for Tailwind v4 */
+@theme {
+    --color-gold-400: #E5C558;
+    --color-gold-500: #D4AF37;
+    --color-gold-600: #AA8C2C;
+    --color-background: hsl(var(--background));
+    --color-foreground: hsl(var(--foreground));
+    --color-card: hsl(var(--card));
+    --color-card-foreground: hsl(var(--card-foreground));
+    --color-primary: hsl(var(--primary));
+    --color-primary-foreground: hsl(var(--primary-foreground));
+    --color-secondary: hsl(var(--secondary));
+    --color-secondary-foreground: hsl(var(--secondary-foreground));
+    --color-muted: hsl(var(--muted));
+    --color-muted-foreground: hsl(var(--muted-foreground));
+    --color-accent: hsl(var(--accent));
+    --color-accent-foreground: hsl(var(--accent-foreground));
+    --color-destructive: hsl(var(--destructive));
+    --color-border: hsl(var(--border));
+    --color-ring: hsl(var(--ring));
+    --radius-lg: var(--radius);
+    --radius-md: calc(var(--radius) - 2px);
+    --radius-sm: calc(var(--radius) - 4px);
 }

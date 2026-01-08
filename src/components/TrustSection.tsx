@@ -1,6 +1,6 @@
 'use client';
 
-import { motion } from 'framer-motion';
+import { motion } from 'motion/react';
 import { Home, Sparkles, Shield, Banknote, Award, Users, Clock, Heart } from 'lucide-react';
 
 const benefits = [

@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { motion } from 'framer-motion';
+import { motion } from 'motion/react';
 import {
     User,
     Mail,
@@ -160,10 +160,10 @@ export default function RegisterPage() {
                                 <div className="flex flex-col items-center relative flex-1">
                                     <div
                                         className={`w-12 h-12 rounded-full flex items-center justify-center font-bold transition-all ${step < currentStep
-                                                ? 'bg-green-500 text-white'
-                                                : step === currentStep
-                                                    ? 'bg-primary-500 text-white'
-                                                    : 'bg-white/10 text-gray-500'
+                                            ? 'bg-green-500 text-white'
+                                            : step === currentStep
+                                                ? 'bg-primary-500 text-white'
+                                                : 'bg-white/10 text-gray-500'
                                             }`}
                                     >
                                         {step < currentStep ? (
@@ -496,8 +496,8 @@ export default function RegisterPage() {
                                     </label>
                                     <div
                                         className={`border-2 border-dashed rounded-2xl p-8 text-center ${photoPreview
-                                                ? 'border-primary-500 bg-primary-500/10'
-                                                : 'border-white/20 bg-white/5 hover:border-primary-500 hover:bg-white/10'
+                                            ? 'border-primary-500 bg-primary-500/10'
+                                            : 'border-white/20 bg-white/5 hover:border-primary-500 hover:bg-white/10'
                                             } transition-all`}
                                     >
                                         {photoPreview ? (

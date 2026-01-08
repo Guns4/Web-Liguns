@@ -1,14 +1,10 @@
 import { createClient } from '@supabase/supabase-js';
-import type { Database } from './database.types';
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
+const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '';
 
-if (!supabaseUrl || !supabaseAnonKey) {
-    throw new Error('Missing Supabase environment variables');
-}
-
-export const supabase = createClient<Database>(supabaseUrl, supabaseAnonKey, {
+// Create Supabase client (will gracefully fail if not configured)
+export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
     auth: {
         autoRefreshToken: true,
         persistSession: true,
@@ -17,21 +13,56 @@ export const supabase = createClient<Database>(supabaseUrl, supabaseAnonKey, {
 });
 
 // =============================================
-// TYPE DEFINITIONS
+// TYPE DEFINITIONS (Manually typed for now)
 // =============================================
 
-export type Profile = Database['public']['Tables']['profiles']['Row'];
-export type Job = Database['public']['Tables']['jobs']['Row'];
-export type JobApplication = Database['public']['Tables']['job_applications']['Row'];
-export type Attendance = Database['public']['Tables']['attendance']['Row'];
-export type FinancialRecord = Database['public']['Tables']['financial_records']['Row'];
-export type Gamification = Database['public']['Tables']['gamification']['Row'];
-export type StoreItem = Database['public']['Tables']['store_items']['Row'];
-export type StorePurchase = Database['public']['Tables']['store_purchases']['Row'];
+export interface Job {
+    id: string;
+    title: string;
+    category: 'LC' | 'Spa' | 'Model' | 'Entertainer' | 'Other';
+    salary_min: number | null;
+    salary_max: number | null;
+    salary_display: string | null;
+    description: string;
+    requirements: string | null;
+    responsibilities: string | null;
+    facilities: Record<string, boolean> | null;
+    location: string;
+    city: string | null;
+    province: string | null;
+    map_url: string | null;
+    image_url: string | null;
+    gallery: string[];
+    is_active: boolean;
+    slots_available: number;
+    slots_filled: number;
+    created_by: string | null;
+    created_at: string;
+    updated_at: string;
+    deadline: string | null;
+}
 
-export type ProfileInsert = Database['public']['Tables']['profiles']['Insert'];
-export type JobInsert = Database['public']['Tables']['jobs']['Insert'];
-export type ApplicationInsert = Database['public']['Tables']['job_applications']['Insert'];
+export interface Profile {
+    id: string;
+    role: 'admin' | 'talent' | 'user';
+    full_name: string;
+    email: string;
+    phone: string | null;
+    address: string | null;
+    height: number | null;
+    weight: number | null;
+    photos: string[];
+    profile_photo: string | null;
+    join_date: string;
+    status: 'active' | 'contract' | 'interview' | 'inactive';
+    date_of_birth: string | null;
+    gender: 'male' | 'female' | null;
+    education: string | null;
+    experience: string | null;
+    bio: string | null;
+    created_at: string;
+    updated_at: string;
+}
 
 // =============================================
 // HELPER FUNCTIONS
@@ -49,15 +80,18 @@ export async function getCurrentUser() {
 /**
  * Get user profile with role
  */
-export async function getUserProfile(userId: string) {
+export async function getUserProfile(userId: string): Promise<Profile | null> {
     const { data, error } = await supabase
         .from('profiles')
         .select('*')
         .eq('id', userId)
         .single();
 
-    if (error) throw error;
-    return data;
+    if (error) {
+        console.error('Error fetching profile:', error);
+        return null;
+    }
+    return data as Profile;
 }
 
 /**
@@ -66,7 +100,7 @@ export async function getUserProfile(userId: string) {
 export async function isAdmin(userId: string): Promise<boolean> {
     try {
         const profile = await getUserProfile(userId);
-        return profile.role === 'admin';
+        return profile?.role === 'admin' || false;
     } catch {
         return false;
     }
@@ -75,29 +109,45 @@ export async function isAdmin(userId: string): Promise<boolean> {
 /**
  * Get active jobs
  */
-export async function getActiveJobs() {
-    const { data, error } = await supabase
-        .from('jobs')
-        .select('*')
-        .eq('is_active', true)
-        .order('created_at', { ascending: false });
+export async function getActiveJobs(): Promise<Job[]> {
+    try {
+        const { data, error } = await supabase
+            .from('jobs')
+            .select('*')
+            .eq('is_active', true)
+            .order('created_at', { ascending: false });
 
-    if (error) throw error;
-    return data;
+        if (error) {
+            console.error('Error fetching jobs:', error);
+            return [];
+        }
+        return (data as Job[]) || [];
+    } catch (err) {
+        console.error('Failed to fetch jobs:', err);
+        return [];
+    }
 }
 
 /**
  * Get job by ID with details
  */
-export async function getJobById(id: string) {
-    const { data, error } = await supabase
-        .from('jobs')
-        .select('*')
-        .eq('id', id)
-        .single();
+export async function getJobById(id: string): Promise<Job | null> {
+    try {
+        const { data, error } = await supabase
+            .from('jobs')
+            .select('*')
+            .eq('id', id)
+            .single();
 
-    if (error) throw error;
-    return data;
+        if (error) {
+            console.error('Error fetching job:', error);
+            return null;
+        }
+        return data as Job;
+    } catch (err) {
+        console.error('Failed to fetch job:', err);
+        return null;
+    }
 }
 
 /**
@@ -147,87 +197,6 @@ export async function getUserApplications(userId: string) {
 }
 
 /**
- * Calculate net salary for a user
- */
-export async function calculateNetSalary(
-    userId: string,
-    month: number,
-    year: number
-) {
-    const { data, error } = await supabase.rpc('calculate_net_salary', {
-        p_user_id: userId,
-        p_month: month,
-        p_year: year,
-    });
-
-    if (error) throw error;
-    return data?.[0];
-}
-
-/**
- * Get financial records for a user
- */
-export async function getUserFinancialRecords(
-    userId: string,
-    month?: number,
-    year?: number
-) {
-    let query = supabase
-        .from('financial_records')
-        .select('*')
-        .eq('user_id', userId);
-
-    if (month && year) {
-        query = query
-            .eq('period_month', month)
-            .eq('period_year', year);
-    }
-
-    const { data, error } = await query.order('date', { ascending: false });
-
-    if (error) throw error;
-    return data;
-}
-
-/**
- * Get user's performance ranking
- */
-export async function getUserRanking(userId: string, month: number, year: number) {
-    const { data, error } = await supabase
-        .from('gamification')
-        .select('*')
-        .eq('user_id', userId)
-        .eq('month', month)
-        .eq('year', year)
-        .single();
-
-    if (error) throw error;
-    return data;
-}
-
-/**
- * Get top performers for leaderboard
- */
-export async function getTopPerformers(month: number, year: number, limit = 10) {
-    const { data, error } = await supabase
-        .from('gamification')
-        .select(`
-      *,
-      profiles (
-        full_name,
-        profile_photo
-      )
-    `)
-        .eq('month', month)
-        .eq('year', year)
-        .order('rank_score', { ascending: false })
-        .limit(limit);
-
-    if (error) throw error;
-    return data;
-}
-
-/**
  * Get store items
  */
 export async function getStoreItems(category?: string) {
@@ -241,42 +210,6 @@ export async function getStoreItems(category?: string) {
     }
 
     const { data, error } = await query.order('name');
-
-    if (error) throw error;
-    return data;
-}
-
-/**
- * Purchase store item
- */
-export async function purchaseItem(
-    userId: string,
-    itemId: string,
-    quantity: number
-) {
-    // First get the item details
-    const { data: item, error: itemError } = await supabase
-        .from('store_items')
-        .select('price, stock')
-        .eq('id', itemId)
-        .single();
-
-    if (itemError) throw itemError;
-
-    const totalPrice = item.price * quantity;
-
-    // Create purchase record
-    const { data, error } = await supabase
-        .from('store_purchases')
-        .insert({
-            user_id: userId,
-            item_id: itemId,
-            quantity,
-            unit_price: item.price,
-            total_price: totalPrice,
-        })
-        .select()
-        .single();
 
     if (error) throw error;
     return data;
@@ -304,32 +237,6 @@ export async function getAttendanceRecords(
     }
 
     const { data, error } = await query.order('date', { ascending: false });
-
-    if (error) throw error;
-    return data;
-}
-
-/**
- * Mark attendance
- */
-export async function markAttendance(
-    userId: string,
-    date: string,
-    status: 'present' | 'sick' | 'alpha' | 'permit' | 'leave',
-    checkInTime?: string,
-    notes?: string
-) {
-    const { data, error } = await supabase
-        .from('attendance')
-        .upsert({
-            user_id: userId,
-            date,
-            status,
-            check_in_time: checkInTime,
-            notes,
-        })
-        .select()
-        .single();
 
     if (error) throw error;
     return data;

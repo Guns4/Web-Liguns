@@ -1,6 +1,6 @@
 'use client';
 
-import { motion } from 'framer-motion';
+import { motion } from 'motion/react';
 import { MapPin, DollarSign, Users, ArrowRight, Briefcase } from 'lucide-react';
 import Link from 'next/link';
 import type { Job } from '@/lib/supabase';

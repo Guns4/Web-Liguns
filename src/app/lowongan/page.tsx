@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { motion } from 'framer-motion';
+import { motion } from 'motion/react';
 import {
     Search,
     Filter,
@@ -214,8 +214,8 @@ export default function LowonganPage() {
                                 key={category.id}
                                 onClick={() => setSelectedCategory(category.id)}
                                 className={`px-6 py-2 rounded-full font-medium transition-all ${selectedCategory === category.id
-                                        ? 'bg-primary-500 text-white shadow-lg'
-                                        : 'bg-white/5 text-gray-300 hover:bg-white/10'
+                                    ? 'bg-primary-500 text-white shadow-lg'
+                                    : 'bg-white/5 text-gray-300 hover:bg-white/10'
                                     }`}
                             >
                                 {category.label}

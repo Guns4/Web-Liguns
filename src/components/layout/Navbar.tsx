@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { Menu, X, Sparkles, User, LogIn } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence } from 'motion/react';
 
 export default function Navbar() {
     const [isScrolled, setIsScrolled] = useState(false);
@@ -32,8 +32,8 @@ export default function Navbar() {
             animate={{ y: 0 }}
             transition={{ duration: 0.5 }}
             className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled
-                    ? 'navbar-sticky'
-                    : 'bg-transparent border-b border-white/5'
+                ? 'navbar-sticky'
+                : 'bg-transparent border-b border-white/5'
                 }`}
         >
             <div className="container-custom">
