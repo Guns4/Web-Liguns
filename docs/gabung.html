@@ -1,0 +1,150 @@
+﻿<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Gabung Bersama Liguns Entertainment - Daftar menjadi talent atau venue di agency hiburan profesional Bandung.">
+  <meta name="keywords" content="gabung liguns, daftar talent, daftar venue, liguns entertainment">
+  <meta name="author" content="Liguns Entertainment">
+  <title>Gabung Sekarang | Liguns Entertainment</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Vollkorn:wght@400;500;600&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/common.css">
+  <link rel="stylesheet" href="assets/css/gabung.css">
+  <link rel="stylesheet" href="assets/css/premium-enhancements.css">
+</head>
+
+<body class="fade-page">
+
+  <!-- ===== Header ===== -->
+  <header>
+    <div class="header-container">
+      <div class="logo">
+        <a href="index.html"><img src="assets/img/Logo Liguns.png" alt="Liguns Entertainment"></a>
+      </div>
+      
+      <div class="header-right">
+      <nav id="navbar">
+        <ul>
+          <li><a href="index.html">Beranda</a></li>
+          <li><a href="lowongan.html">Lowongan Kerja</a></li>
+          <li><a href="layanan.html">Layanan</a></li>
+          <li><a href="tentang.html">Tentang</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- ===== Form Section ===== -->
+  <section class="form-section fade-section">
+    <div class="form-bg-animated">
+      <span class="shape shape1"></span>
+      <span class="shape shape2"></span>
+      <span class="shape shape3"></span>
+    </div>
+
+    <div class="form-container">
+      <div class="form-header">
+        <h1>Gabung Bersama Liguns Entertainment</h1>
+        <p>Isi data lengkap dan tim kami akan membalas Pesan Anda untuk proses selanjutnya.</p>
+      </div>
+
+      <form id="gabungForm" enctype="multipart/form-data">
+      <div class="form-group">
+        <label>Nama Lengkap</label>
+        <input type="text" name="nama" required>
+      </div>
+
+      <div class="form-group">
+        <label>Usia</label>
+        <input type="number" name="usia" required>
+      </div>
+
+      <div class="form-group">
+        <label>Berat Badan (kg)</label>
+        <input type="number" name="berat" required>
+      </div>
+
+      <div class="form-group">
+        <label>Tinggi Badan (cm)</label>
+        <input type="number" name="tinggi" required>
+      </div>
+
+      <div class="form-group">
+        <label>Foto Selfie dikirim di WhatsApp</label>
+      </div>
+
+      <div class="form-group">
+        <label>Foto Full Body dikirim di WhatsApp</label>
+      </div>
+
+      <div class="form-group">
+        <label>Lowongan yang diminati</label>
+        <select name="lowongan" required>
+          <option value="">-- Pilih Lowongan --</option>
+          <option value="Terapis Spa">Terapis Spa</option>
+          <option value="Ladies Karaoke">Ladies Karaoke</option>
+        </select>
+      </div>
+
+      <button type="submit" class="btn">Kirim ke WhatsApp</button>
+      </form>
+
+      <div id="status"></div>
+    </div>
+  </section>  <script>
+    const form = document.getElementById("gabungForm");
+    const statusDiv = document.getElementById("status");
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      statusDiv.textContent = "ðŸ“¤ Mengirim data...";
+      statusDiv.classList.remove('success', 'error');
+
+      const formData = new FormData(form);
+
+      try {
+        const res = await fetch("/send-whatsapp", {
+          method: "POST",
+          body: formData
+        });
+
+        const data = await res.json();
+        if (data.success) {
+          statusDiv.textContent = "âœ… Data berhasil dikirim! Tim kami akan menghubungi Anda segera.";
+          statusDiv.classList.add('success');
+          form.reset();
+        } else {
+          statusDiv.textContent = "âŒ Gagal mengirim data. Silakan coba lagi.";
+          statusDiv.classList.add('error');
+        }
+      } catch (error) {
+        statusDiv.textContent = "❌ Terjadi kesalahan. Silakan coba lagi.";
+        statusDiv.classList.add('error');
+      }
+    });
+  </script>
+
+<footer>
+  <h3 class="footer-title">IKUTI KAMI</h3>
+
+  <div class="footer-socials">
+          <a href="https://instagram.com" target="_blank" title="Instagram"><img src="assets/img/Instagram.png" alt="Instagram"></a>
+          <a href="https://wa.me/6289669094929" target="_blank" title="WhatsApp"><img src="assets/img/Whatsapp.png" alt="WhatsApp"></a>
+          <a href="https://tiktok.com" target="_blank" title="TikTok"><img src="assets/img/Tiktok.png" alt="TikTok"></a>
+        </div>
+      </div>
+
+  <div class="footer-divider"></div>
+
+  <div class="footer-copy">
+    © 2023 Liguns Entertainment | All Rights Reserved
+  </div>
+</footer>
+
+  <script src="assets/js/navigation.js"></script>
+</body>
+</html>
+
+
