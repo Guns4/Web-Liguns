@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { motion } from 'motion/react';
@@ -9,102 +9,10 @@ import {
     MapPin,
     Briefcase,
     Building2,
-    Clock
+    Clock,
+    Loader2
 } from 'lucide-react';
-
-// Job listings data
-const jobListings = [
-    {
-        id: 'venetian',
-        name: 'Venetian Havana',
-        city: 'bandung',
-        cityLabel: 'Kota Bandung',
-        position: 'Terapis Spa',
-        image: '/venues/venetian.png',
-        featured: true,
-        slug: 'venetian-havana'
-    },
-    {
-        id: 'denver-club',
-        name: 'Denver Club',
-        city: 'bandung',
-        cityLabel: 'Kota Bandung',
-        position: 'Ladies Karaoke',
-        image: '/venues/denver.png',
-        featured: false,
-        slug: 'denver-club'
-    },
-    {
-        id: 'denver-spa',
-        name: 'Denver Spa',
-        city: 'bandung',
-        cityLabel: 'Kota Bandung',
-        position: 'Terapis Spa',
-        image: '/venues/denver-spa.png',
-        featured: false,
-        slug: 'denver-spa'
-    },
-    {
-        id: 'vender',
-        name: 'Vender Club',
-        city: 'bandung',
-        cityLabel: 'Kota Bandung',
-        position: 'Ladies Karaoke',
-        image: '/venues/vender.png',
-        featured: false,
-        slug: 'vender-club'
-    },
-    {
-        id: '80spa',
-        name: '80 Spa',
-        city: 'bandung',
-        cityLabel: 'Kota Bandung',
-        position: 'Terapis Spa',
-        image: '/venues/80spa.png',
-        featured: false,
-        slug: '80-spa'
-    },
-    {
-        id: 'saga',
-        name: 'Saga Vigour',
-        city: 'bandung',
-        cityLabel: 'Kota Bandung',
-        position: 'Terapis Spa',
-        image: '/venues/saga.png',
-        featured: false,
-        slug: 'saga-vigour'
-    },
-    {
-        id: 'sultan',
-        name: 'Sultan Spa',
-        city: 'bandung',
-        cityLabel: 'Kota Bandung',
-        position: 'Terapis Spa',
-        image: '/venues/sultan.png',
-        featured: false,
-        slug: 'sultan-spa'
-    },
-    {
-        id: 'liv',
-        name: 'LIV Club',
-        city: 'bandung',
-        cityLabel: 'Kota Bandung',
-        position: 'Ladies Karaoke',
-        image: '/venues/liv.png',
-        featured: false,
-        slug: 'liv-club'
-    },
-    {
-        id: 'heritage',
-        name: 'Heritage',
-        city: 'bandung',
-        cityLabel: 'Kota Bandung',
-        position: 'Terapis Spa • Ladies Karaoke',
-        image: '/venues/heritage.png',
-        featured: false,
-        slug: 'heritage'
-    }
-];
+import { getActiveVenues, type Venue } from '@/lib/venues';
 
 // Placeholder cities (coming soon)
 const placeholderCities = [
@@ -113,29 +21,59 @@ const placeholderCities = [
     { name: 'Yogyakarta', city: 'lainnya' }
 ];
 
-// Filter buttons
-const filterOptions = [
+// Filter buttons - we'll dynamically add available cities
+const baseFilterOptions = [
     { label: 'Semua', value: 'all' },
-    { label: 'Bandung', value: 'bandung' },
-    { label: 'Jakarta', value: 'jakarta' },
-    { label: 'Surabaya', value: 'surabaya' },
-    { label: 'Kota Lainnya', value: 'lainnya' }
 ];
 
 export default function LowonganPage() {
     const [searchQuery, setSearchQuery] = useState('');
     const [activeFilter, setActiveFilter] = useState('all');
+    const [venues, setVenues] = useState<Venue[]>([]);
+    const [loading, setLoading] = useState(true);
 
-    // Filter and search jobs
-    const filteredJobs = useMemo(() => {
-        return jobListings.filter(job => {
-            const matchesFilter = activeFilter === 'all' || job.city === activeFilter;
-            const matchesSearch = job.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                job.cityLabel.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                job.position.toLowerCase().includes(searchQuery.toLowerCase());
+    // Load venues from database
+    useEffect(() => {
+        loadVenues();
+    }, []);
+
+    const loadVenues = async () => {
+        setLoading(true);
+        try {
+            const data = await getActiveVenues();
+            setVenues(data);
+        } catch (error) {
+            console.error('Error loading venues:', error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    // Get unique cities from venues
+    const filterOptions = useMemo(() => {
+        const uniqueCities = Array.from(new Set(venues.map(v => v.city)));
+        const cityOptions = uniqueCities.map(city => ({
+            label: city,
+            value: city.toLowerCase()
+        }));
+
+        return [
+            ...baseFilterOptions,
+            ...cityOptions,
+            { label: 'Kota Lainnya', value: 'lainnya' }
+        ];
+    }, [venues]);
+
+    // Filter and search venues
+    const filteredVenues = useMemo(() => {
+        return venues.filter(venue => {
+            const matchesFilter = activeFilter === 'all' || venue.city.toLowerCase() === activeFilter;
+            const matchesSearch = venue.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                venue.city.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                venue.position.toLowerCase().includes(searchQuery.toLowerCase());
             return matchesFilter && matchesSearch;
         });
-    }, [searchQuery, activeFilter]);
+    }, [venues, searchQuery, activeFilter]);
 
     // Show placeholder cities based on filter
     const showPlaceholders = activeFilter === 'all' ||
@@ -154,7 +92,7 @@ export default function LowonganPage() {
         setActiveFilter('all');
     };
 
-    const noResults = filteredJobs.length === 0 &&
+    const noResults = filteredVenues.length === 0 &&
         (activeFilter === 'bandung' || !showPlaceholders || filteredPlaceholders.length === 0);
 
     return (
@@ -200,8 +138,8 @@ export default function LowonganPage() {
                                 key={option.value}
                                 onClick={() => setActiveFilter(option.value)}
                                 className={`px-6 py-2.5 rounded-full font-medium transition-all duration-300 ${activeFilter === option.value
-                                        ? 'bg-gold-500 text-black'
-                                        : 'bg-white/5 text-gray-300 hover:bg-white/10 border border-white/10'
+                                    ? 'bg-gold-500 text-black'
+                                    : 'bg-white/5 text-gray-300 hover:bg-white/10 border border-white/10'
                                     }`}
                             >
                                 {option.label}
@@ -210,136 +148,150 @@ export default function LowonganPage() {
                     </div>
                 </motion.div>
 
-                {/* Job Cards Grid */}
-                <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                    {/* Actual Jobs */}
-                    {filteredJobs.map((job, index) => (
-                        <motion.div
-                            key={job.id}
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ delay: index * 0.05 }}
-                            className="group relative glass rounded-xl overflow-hidden hover:border-gold-500/30 transition-all duration-300"
-                        >
-                            {/* Featured Badge */}
-                            {job.featured && (
-                                <div className="absolute top-3 left-3 z-10 bg-gold-500 text-black text-xs font-bold px-3 py-1 rounded-full">
-                                    Featured
-                                </div>
-                            )}
+                {/* Loading State */}
+                {loading ? (
+                    <div className="glass rounded-xl p-16 text-center">
+                        <Loader2 className="w-16 h-16 text-gold-500 mx-auto mb-4 animate-spin" />
+                        <p className="text-gray-400 text-lg">Memuat lowongan kerja tersedia...</p>
+                    </div>
+                ) : (
+                    <>
+                        {/* Job Cards Grid */}
+                        <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                            {/* Actual Venues */}
+                            {filteredVenues.map((venue, index) => (
+                                <motion.div
+                                    key={venue.id}
+                                    initial={{ opacity: 0, y: 20 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    transition={{ delay: index * 0.05 }}
+                                    className="group relative glass rounded-xl overflow-hidden hover:border-gold-500/30 transition-all duration-300"
+                                >
+                                    {/* Featured Badge */}
+                                    {venue.featured && (
+                                        <div className="absolute top-3 left-3 z-10 bg-gold-500 text-black text-xs font-bold px-3 py-1 rounded-full">
+                                            Featured
+                                        </div>
+                                    )}
 
-                            {/* Card Image */}
-                            <div className="relative h-48 bg-gradient-to-br from-gray-800 to-gray-900 flex items-center justify-center overflow-hidden">
-                                <div className="w-24 h-24 bg-white/10 rounded-xl flex items-center justify-center">
-                                    <Building2 className="w-12 h-12 text-gold-500/50" />
-                                </div>
+                                    {/* Card Image */}
+                                    <div className="relative h-48 bg-gradient-to-br from-gray-800 to-gray-900 flex items-center justify-center overflow-hidden">
+                                        {venue.image_url ? (
+                                            <img src={venue.image_url} alt={venue.name} className="w-full h-full object-cover" />
+                                        ) : (
+                                            <div className="w-24 h-24 bg-white/10 rounded-xl flex items-center justify-center">
+                                                <Building2 className="w-12 h-12 text-gold-500/50" />
+                                            </div>
+                                        )}
 
-                                {/* Hover Overlay */}
-                                <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                                    <Link
-                                        href={`/lowongan/${job.slug}`}
-                                        className="bg-gold-500 hover:bg-gold-600 text-black font-semibold px-6 py-2.5 rounded-lg transition-all transform translate-y-4 group-hover:translate-y-0"
-                                    >
-                                        Lihat Detail
-                                    </Link>
-                                </div>
-                            </div>
+                                        {/* Hover Overlay */}
+                                        <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                                            <Link
+                                                href={`/lowongan/${venue.slug || venue.id}`}
+                                                className="bg-gold-500 hover:bg-gold-600 text-black font-semibold px-6 py-2.5 rounded-lg transition-all transform translate-y-4 group-hover:translate-y-0"
+                                            >
+                                                Lihat Detail
+                                            </Link>
+                                        </div>
+                                    </div>
 
-                            {/* Card Content */}
-                            <div className="p-5">
-                                <h3 className="text-xl font-semibold text-white mb-2 group-hover:text-gold-400 transition-colors">
-                                    {job.name}
-                                </h3>
-                                <div className="flex items-center gap-2 text-gray-400 text-sm mb-2">
-                                    <MapPin className="w-4 h-4 text-gold-500" />
-                                    <span>{job.cityLabel}</span>
-                                </div>
-                                <div className="flex items-center gap-2 text-gray-300 text-sm">
-                                    <Briefcase className="w-4 h-4 text-gold-500" />
-                                    <span>{job.position}</span>
-                                </div>
-                            </div>
-                        </motion.div>
-                    ))}
+                                    {/* Card Content */}
+                                    <div className="p-5">
+                                        <h3 className="text-xl font-semibold text-white mb-2 group-hover:text-gold-400 transition-colors">
+                                            {venue.name}
+                                        </h3>
+                                        <div className="flex items-center gap-2 text-gray-400 text-sm mb-2">
+                                            <MapPin className="w-4 h-4 text-gold-500" />
+                                            <span>Kota {venue.city}</span>
+                                        </div>
+                                        <div className="flex items-center gap-2 text-gray-300 text-sm">
+                                            <Briefcase className="w-4 h-4 text-gold-500" />
+                                            <span>{venue.position}</span>
+                                        </div>
+                                    </div>
+                                </motion.div>
+                            ))}
 
-                    {/* Placeholder Cities (Coming Soon) */}
-                    {showPlaceholders && filteredPlaceholders.map((placeholder, index) => (
-                        <motion.div
-                            key={placeholder.name}
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ delay: (filteredJobs.length + index) * 0.05 }}
-                            className="relative glass rounded-xl overflow-hidden opacity-70"
-                        >
-                            {/* Card Image Placeholder */}
-                            <div className="relative h-48 bg-gradient-to-br from-gray-800 to-gray-900 flex flex-col items-center justify-center">
-                                <span className="text-5xl mb-2">🏙️</span>
-                                <span className="bg-gold-500/20 text-gold-400 text-xs font-semibold px-4 py-1.5 rounded-full flex items-center gap-1">
-                                    <Clock className="w-3 h-3" />
-                                    Segera Hadir
-                                </span>
-                            </div>
+                            {/* Placeholder Cities (Coming Soon) */}
+                            {showPlaceholders && filteredPlaceholders.map((placeholder, index) => (
+                                <motion.div
+                                    key={placeholder.name}
+                                    initial={{ opacity: 0, y: 20 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    transition={{ delay: (filteredVenues.length + index) * 0.05 }}
+                                    className="relative glass rounded-xl overflow-hidden opacity-70"
+                                >
+                                    {/* Card Image Placeholder */}
+                                    <div className="relative h-48 bg-gradient-to-br from-gray-800 to-gray-900 flex flex-col items-center justify-center">
+                                        <span className="text-5xl mb-2">🏙️</span>
+                                        <span className="bg-gold-500/20 text-gold-400 text-xs font-semibold px-4 py-1.5 rounded-full flex items-center gap-1">
+                                            <Clock className="w-3 h-3" />
+                                            Segera Hadir
+                                        </span>
+                                    </div>
 
-                            {/* Card Content */}
-                            <div className="p-5">
-                                <h3 className="text-xl font-semibold text-white mb-2">
-                                    {placeholder.name}
-                                </h3>
-                                <div className="flex items-center gap-2 text-gray-400 text-sm mb-2">
-                                    <MapPin className="w-4 h-4 text-gold-500" />
-                                    <span>Kota {placeholder.name}</span>
-                                </div>
-                                <div className="flex items-center gap-2 text-gray-500 text-sm">
-                                    <Briefcase className="w-4 h-4" />
-                                    <span>Posisi tersedia</span>
-                                </div>
-                                <p className="text-gray-500 text-xs mt-3">
-                                    Lowongan kerja di {placeholder.name} akan segera tersedia
+                                    {/* Card Content */}
+                                    <div className="p-5">
+                                        <h3 className="text-xl font-semibold text-white mb-2">
+                                            {placeholder.name}
+                                        </h3>
+                                        <div className="flex items-center gap-2 text-gray-400 text-sm mb-2">
+                                            <MapPin className="w-4 h-4 text-gold-500" />
+                                            <span>Kota {placeholder.name}</span>
+                                        </div>
+                                        <div className="flex items-center gap-2 text-gray-500 text-sm">
+                                            <Briefcase className="w-4 h-4" />
+                                            <span>Posisi tersedia</span>
+                                        </div>
+                                        <p className="text-gray-500 text-xs mt-3">
+                                            Lowongan kerja di {placeholder.name} akan segera tersedia
+                                        </p>
+                                    </div>
+                                </motion.div>
+                            ))}
+                        </div>
+
+                        {/* No Results Message */}
+                        {noResults && (
+                            <motion.div
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                className="text-center py-16"
+                            >
+                                <p className="text-gray-400 text-xl mb-4">
+                                    😔 Tidak ada lowongan yang sesuai dengan pencarian Anda
                                 </p>
-                            </div>
-                        </motion.div>
-                    ))}
-                </div>
+                                <button
+                                    onClick={resetFilters}
+                                    className="bg-gold-500 hover:bg-gold-600 text-black font-semibold px-6 py-3 rounded-xl transition-all"
+                                >
+                                    Bersihkan Filter
+                                </button>
+                            </motion.div>
+                        )}
 
-                {/* No Results Message */}
-                {noResults && (
-                    <motion.div
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        className="text-center py-16"
-                    >
-                        <p className="text-gray-400 text-xl mb-4">
-                            😔 Tidak ada lowongan yang sesuai dengan pencarian Anda
-                        </p>
-                        <button
-                            onClick={resetFilters}
-                            className="bg-gold-500 hover:bg-gold-600 text-black font-semibold px-6 py-3 rounded-xl transition-all"
+                        {/* CTA Section */}
+                        <motion.div
+                            initial={{ opacity: 0, y: 20 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true }}
+                            className="mt-16 glass-gold p-10 rounded-2xl text-center"
                         >
-                            Bersihkan Filter
-                        </button>
-                    </motion.div>
+                            <h2 className="text-2xl md:text-3xl font-bold mb-4">
+                                Tidak menemukan posisi yang cocok?
+                            </h2>
+                            <p className="text-gray-400 mb-6 max-w-xl mx-auto">
+                                Daftarkan diri Anda dan kami akan menghubungi ketika ada lowongan yang sesuai dengan profil Anda.
+                            </p>
+                            <Link
+                                href="/register"
+                                className="inline-flex items-center gap-2 bg-gold-500 hover:bg-gold-600 text-black font-semibold px-8 py-4 rounded-xl transition-all hover:scale-105"
+                            >
+                                Daftar Sekarang
+                            </Link>
+                        </motion.div>
+                    </>
                 )}
-
-                {/* CTA Section */}
-                <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    className="mt-16 glass-gold p-10 rounded-2xl text-center"
-                >
-                    <h2 className="text-2xl md:text-3xl font-bold mb-4">
-                        Tidak menemukan posisi yang cocok?
-                    </h2>
-                    <p className="text-gray-400 mb-6 max-w-xl mx-auto">
-                        Daftarkan diri Anda dan kami akan menghubungi ketika ada lowongan yang sesuai dengan profil Anda.
-                    </p>
-                    <Link
-                        href="/register"
-                        className="inline-flex items-center gap-2 bg-gold-500 hover:bg-gold-600 text-black font-semibold px-8 py-4 rounded-xl transition-all hover:scale-105"
-                    >
-                        Daftar Sekarang
-                    </Link>
-                </motion.div>
             </div>
         </main>
     );

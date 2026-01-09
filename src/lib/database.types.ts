@@ -1,3 +1,8 @@
+// =============================================
+// LIGUNS ENTERTAINMENT - DATABASE TYPE DEFINITIONS
+// Auto-generated from supabase/schema.sql
+// =============================================
+
 export type Json =
     | string
     | number
@@ -33,7 +38,7 @@ export interface Database {
                 }
                 Insert: {
                     id: string
-                    role?: 'admin' | 'talent' | 'user'
+                    role: 'admin' | 'talent' | 'user'
                     full_name: string
                     email: string
                     phone?: string | null
@@ -73,6 +78,14 @@ export interface Database {
                     created_at?: string
                     updated_at?: string
                 }
+                Relationships: [
+                    {
+                        foreignKeyName: "profiles_id_fkey"
+                        columns: ["id"]
+                        referencedRelation: "users"
+                        referencedColumns: ["id"]
+                    }
+                ]
             }
             jobs: {
                 Row: {
@@ -150,6 +163,14 @@ export interface Database {
                     updated_at?: string
                     deadline?: string | null
                 }
+                Relationships: [
+                    {
+                        foreignKeyName: "jobs_created_by_fkey"
+                        columns: ["created_by"]
+                        referencedRelation: "profiles"
+                        referencedColumns: ["id"]
+                    }
+                ]
             }
             job_applications: {
                 Row: {
@@ -191,6 +212,20 @@ export interface Database {
                     reviewed_at?: string | null
                     updated_at?: string
                 }
+                Relationships: [
+                    {
+                        foreignKeyName: "job_applications_job_id_fkey"
+                        columns: ["job_id"]
+                        referencedRelation: "jobs"
+                        referencedColumns: ["id"]
+                    },
+                    {
+                        foreignKeyName: "job_applications_user_id_fkey"
+                        columns: ["user_id"]
+                        referencedRelation: "profiles"
+                        referencedColumns: ["id"]
+                    }
+                ]
             }
             attendance: {
                 Row: {
@@ -229,6 +264,20 @@ export interface Database {
                     created_at?: string
                     updated_at?: string
                 }
+                Relationships: [
+                    {
+                        foreignKeyName: "attendance_user_id_fkey"
+                        columns: ["user_id"]
+                        referencedRelation: "profiles"
+                        referencedColumns: ["id"]
+                    },
+                    {
+                        foreignKeyName: "attendance_approved_by_fkey"
+                        columns: ["approved_by"]
+                        referencedRelation: "profiles"
+                        referencedColumns: ["id"]
+                    }
+                ]
             }
             financial_records: {
                 Row: {
@@ -282,6 +331,20 @@ export interface Database {
                     created_at?: string
                     updated_at?: string
                 }
+                Relationships: [
+                    {
+                        foreignKeyName: "financial_records_user_id_fkey"
+                        columns: ["user_id"]
+                        referencedRelation: "profiles"
+                        referencedColumns: ["id"]
+                    },
+                    {
+                        foreignKeyName: "financial_records_created_by_fkey"
+                        columns: ["created_by"]
+                        referencedRelation: "profiles"
+                        referencedColumns: ["id"]
+                    }
+                ]
             }
             gamification: {
                 Row: {
@@ -335,6 +398,14 @@ export interface Database {
                     created_at?: string
                     updated_at?: string
                 }
+                Relationships: [
+                    {
+                        foreignKeyName: "gamification_user_id_fkey"
+                        columns: ["user_id"]
+                        referencedRelation: "profiles"
+                        referencedColumns: ["id"]
+                    }
+                ]
             }
             store_items: {
                 Row: {
@@ -373,6 +444,7 @@ export interface Database {
                     created_at?: string
                     updated_at?: string
                 }
+                Relationships: []
             }
             store_purchases: {
                 Row: {
@@ -414,6 +486,26 @@ export interface Database {
                     created_at?: string
                     updated_at?: string
                 }
+                Relationships: [
+                    {
+                        foreignKeyName: "store_purchases_user_id_fkey"
+                        columns: ["user_id"]
+                        referencedRelation: "profiles"
+                        referencedColumns: ["id"]
+                    },
+                    {
+                        foreignKeyName: "store_purchases_item_id_fkey"
+                        columns: ["item_id"]
+                        referencedRelation: "store_items"
+                        referencedColumns: ["id"]
+                    },
+                    {
+                        foreignKeyName: "store_purchases_financial_record_id_fkey"
+                        columns: ["financial_record_id"]
+                        referencedRelation: "financial_records"
+                        referencedColumns: ["id"]
+                    }
+                ]
             }
         }
         Views: {
@@ -438,3 +530,48 @@ export interface Database {
         }
     }
 }
+
+// =============================================
+// UTILITY TYPES FOR EASIER ACCESS
+// =============================================
+
+// Table row types
+export type Profile = Database['public']['Tables']['profiles']['Row']
+export type Job = Database['public']['Tables']['jobs']['Row']
+export type JobApplication = Database['public']['Tables']['job_applications']['Row']
+export type Attendance = Database['public']['Tables']['attendance']['Row']
+export type FinancialRecord = Database['public']['Tables']['financial_records']['Row']
+export type Gamification = Database['public']['Tables']['gamification']['Row']
+export type StoreItem = Database['public']['Tables']['store_items']['Row']
+export type StorePurchase = Database['public']['Tables']['store_purchases']['Row']
+
+// Insert types
+export type ProfileInsert = Database['public']['Tables']['profiles']['Insert']
+export type JobInsert = Database['public']['Tables']['jobs']['Insert']
+export type JobApplicationInsert = Database['public']['Tables']['job_applications']['Insert']
+export type AttendanceInsert = Database['public']['Tables']['attendance']['Insert']
+export type FinancialRecordInsert = Database['public']['Tables']['financial_records']['Insert']
+export type GamificationInsert = Database['public']['Tables']['gamification']['Insert']
+export type StoreItemInsert = Database['public']['Tables']['store_items']['Insert']
+export type StorePurchaseInsert = Database['public']['Tables']['store_purchases']['Insert']
+
+// Update types
+export type ProfileUpdate = Database['public']['Tables']['profiles']['Update']
+export type JobUpdate = Database['public']['Tables']['jobs']['Update']
+export type JobApplicationUpdate = Database['public']['Tables']['job_applications']['Update']
+export type AttendanceUpdate = Database['public']['Tables']['attendance']['Update']
+export type FinancialRecordUpdate = Database['public']['Tables']['financial_records']['Update']
+export type GamificationUpdate = Database['public']['Tables']['gamification']['Update']
+export type StoreItemUpdate = Database['public']['Tables']['store_items']['Update']
+export type StorePurchaseUpdate = Database['public']['Tables']['store_purchases']['Update']
+
+// Enum types for stricter typing
+export type UserRole = Profile['role']
+export type UserStatus = Profile['status']
+export type Gender = Profile['gender']
+export type JobCategory = Job['category']
+export type ApplicationStatus = JobApplication['status']
+export type AttendanceStatus = Attendance['status']
+export type FinancialRecordType = FinancialRecord['type']
+export type StoreItemCategory = StoreItem['category']
+export type PurchaseStatus = StorePurchase['status']

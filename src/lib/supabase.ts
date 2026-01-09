@@ -1,10 +1,15 @@
 import { createClient } from '@supabase/supabase-js';
+import { Database, Profile, Job, JobApplication, Attendance, FinancialRecord, StoreItem } from './database.types';
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '';
 
-// Create Supabase client (will gracefully fail if not configured)
-export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
+// =============================================
+// SUPABASE CLIENT WITH FULL TYPE SAFETY
+// =============================================
+
+// Create Supabase client with Database types
+export const supabase = createClient<Database>(supabaseUrl, supabaseAnonKey, {
     auth: {
         autoRefreshToken: true,
         persistSession: true,
@@ -12,60 +17,11 @@ export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
     },
 });
 
-// =============================================
-// TYPE DEFINITIONS (Manually typed for now)
-// =============================================
-
-export interface Job {
-    id: string;
-    title: string;
-    category: 'LC' | 'Spa' | 'Model' | 'Entertainer' | 'Other';
-    salary_min: number | null;
-    salary_max: number | null;
-    salary_display: string | null;
-    description: string;
-    requirements: string | null;
-    responsibilities: string | null;
-    facilities: Record<string, boolean> | null;
-    location: string;
-    city: string | null;
-    province: string | null;
-    map_url: string | null;
-    image_url: string | null;
-    gallery: string[];
-    is_active: boolean;
-    slots_available: number;
-    slots_filled: number;
-    created_by: string | null;
-    created_at: string;
-    updated_at: string;
-    deadline: string | null;
-}
-
-export interface Profile {
-    id: string;
-    role: 'admin' | 'talent' | 'user';
-    full_name: string;
-    email: string;
-    phone: string | null;
-    address: string | null;
-    height: number | null;
-    weight: number | null;
-    photos: string[];
-    profile_photo: string | null;
-    join_date: string;
-    status: 'active' | 'contract' | 'interview' | 'inactive';
-    date_of_birth: string | null;
-    gender: 'male' | 'female' | null;
-    education: string | null;
-    experience: string | null;
-    bio: string | null;
-    created_at: string;
-    updated_at: string;
-}
+// Type-safe Supabase client
+export type TypedSupabaseClient = typeof supabase;
 
 // =============================================
-// HELPER FUNCTIONS
+// HELPER FUNCTIONS WITH TYPE SAFETY
 // =============================================
 
 /**
@@ -91,7 +47,7 @@ export async function getUserProfile(userId: string): Promise<Profile | null> {
         console.error('Error fetching profile:', error);
         return null;
     }
-    return data as Profile;
+    return data;
 }
 
 /**
@@ -121,7 +77,7 @@ export async function getActiveJobs(): Promise<Job[]> {
             console.error('Error fetching jobs:', error);
             return [];
         }
-        return (data as Job[]) || [];
+        return data || [];
     } catch (err) {
         console.error('Failed to fetch jobs:', err);
         return [];
@@ -143,7 +99,7 @@ export async function getJobById(id: string): Promise<Job | null> {
             console.error('Error fetching job:', error);
             return null;
         }
-        return data as Job;
+        return data;
     } catch (err) {
         console.error('Failed to fetch job:', err);
         return null;
@@ -158,7 +114,7 @@ export async function applyForJob(
     userId: string,
     coverLetter?: string,
     resumeUrl?: string
-) {
+): Promise<JobApplication> {
     const { data, error } = await supabase
         .from('job_applications')
         .insert({
@@ -175,7 +131,7 @@ export async function applyForJob(
 }
 
 /**
- * Get user's applications
+ * Get user's applications with job details
  */
 export async function getUserApplications(userId: string) {
     const { data, error } = await supabase
@@ -197,9 +153,9 @@ export async function getUserApplications(userId: string) {
 }
 
 /**
- * Get store items
+ * Get store items with optional category filter
  */
-export async function getStoreItems(category?: string) {
+export async function getStoreItems(category?: StoreItem['category']): Promise<StoreItem[]> {
     let query = supabase
         .from('store_items')
         .select('*')
@@ -212,17 +168,17 @@ export async function getStoreItems(category?: string) {
     const { data, error } = await query.order('name');
 
     if (error) throw error;
-    return data;
+    return data || [];
 }
 
 /**
- * Get attendance records
+ * Get attendance records for a user
  */
 export async function getAttendanceRecords(
     userId: string,
     startDate?: string,
     endDate?: string
-) {
+): Promise<Attendance[]> {
     let query = supabase
         .from('attendance')
         .select('*')
@@ -239,7 +195,52 @@ export async function getAttendanceRecords(
     const { data, error } = await query.order('date', { ascending: false });
 
     if (error) throw error;
-    return data;
+    return data || [];
+}
+
+/**
+ * Get financial records for a user
+ */
+export async function getFinancialRecords(
+    userId: string,
+    month?: number,
+    year?: number
+): Promise<FinancialRecord[]> {
+    let query = supabase
+        .from('financial_records')
+        .select('*')
+        .eq('user_id', userId);
+
+    if (month !== undefined) {
+        query = query.eq('period_month', month);
+    }
+
+    if (year !== undefined) {
+        query = query.eq('period_year', year);
+    }
+
+    const { data, error } = await query.order('date', { ascending: false });
+
+    if (error) throw error;
+    return data || [];
+}
+
+/**
+ * Calculate net salary using database function
+ */
+export async function calculateNetSalary(
+    userId: string,
+    month: number,
+    year: number
+) {
+    const { data, error } = await supabase.rpc('calculate_net_salary', {
+        p_user_id: userId,
+        p_month: month,
+        p_year: year,
+    });
+
+    if (error) throw error;
+    return data && data.length > 0 ? data[0] : null;
 }
 
 export default supabase;

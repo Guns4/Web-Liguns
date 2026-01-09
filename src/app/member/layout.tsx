@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { usePathname, useRouter } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 import { motion, AnimatePresence } from 'motion/react';
 import {
     LayoutDashboard,
@@ -15,6 +15,7 @@ import {
     Bell
 } from 'lucide-react';
 import Image from 'next/image';
+import { useAuth } from '@/context/AuthContext';
 
 export default function MemberLayout({
     children,
@@ -22,24 +23,12 @@ export default function MemberLayout({
     children: React.ReactNode;
 }) {
     const pathname = usePathname();
-    const router = useRouter();
+    const { profile, signOut, isLoading } = useAuth();
     const [isSidebarOpen, setIsSidebarOpen] = useState(true);
     const [isMobile, setIsMobile] = useState(false);
-    const [member, setMember] = useState<any>(null);
 
-    // Auth Check
+    // Responsive Sidebar
     useEffect(() => {
-        const checkAuth = () => {
-            const session = localStorage.getItem('memberSession');
-            if (!session) {
-                router.push('/login');
-            } else {
-                setMember(JSON.parse(session));
-            }
-        };
-        checkAuth();
-
-        // Responsive Sidebar
         const handleResize = () => {
             if (window.innerWidth < 1024) {
                 setIsSidebarOpen(false);
@@ -53,13 +42,25 @@ export default function MemberLayout({
         handleResize(); // Initial check
         window.addEventListener('resize', handleResize);
         return () => window.removeEventListener('resize', handleResize);
-    }, [router]);
+    }, []);
 
-    const handleLogout = () => {
+    const handleLogout = async () => {
         if (confirm('Apakah Anda yakin ingin keluar?')) {
-            localStorage.removeItem('memberSession');
-            router.push('/login');
+            await signOut();
         }
+    };
+
+    // Extract nickname and venue from bio
+    const getNickname = () => {
+        if (!profile?.bio) return profile?.full_name?.split(' ')[0] || 'User';
+        const match = profile.bio.match(/Nickname:\s*([^\|]+)/);
+        return match ? match[1].trim() : profile.full_name?.split(' ')[0] || 'User';
+    };
+
+    const getVenue = () => {
+        if (!profile?.bio) return 'No Venue';
+        const match = profile.bio.match(/Venue:\s*([^\|]+)/);
+        return match ? match[1].trim() : 'No Venue';
     };
 
     const navItems = [
@@ -69,7 +70,17 @@ export default function MemberLayout({
         { href: '/member/profile', label: 'Profil', icon: User },
     ];
 
-    if (!member) return null; // Prevent flash of content
+    // Show loading or prevent flash
+    if (isLoading || !profile) {
+        return (
+            <div className="min-h-screen bg-gradient-to-br from-[#030303] via-[#050505] to-[#0a0a0a] flex items-center justify-center">
+                <div className="text-center">
+                    <div className="w-12 h-12 border-4 border-purple-500/30 border-t-purple-500 rounded-full animate-spin mx-auto mb-4"></div>
+                    <p className="text-gray-400">Loading...</p>
+                </div>
+            </div>
+        );
+    }
 
     return (
         <div className="min-h-screen bg-gradient-to-br from-[#030303] via-[#050505] to-[#0a0a0a] text-white flex">
@@ -103,7 +114,7 @@ export default function MemberLayout({
                     <div className="p-5 rounded-2xl bg-gradient-to-br from-purple-900/20 to-purple-800/10 border border-purple-500/20 backdrop-blur-sm relative overflow-hidden group hover:border-purple-400/30 transition-all duration-300">
                         <div className="absolute top-0 right-0 w-20 h-20 bg-purple-500/10 blur-2xl rounded-full group-hover:bg-purple-500/20 transition-all" />
                         <p className="text-xs text-purple-300/70 mb-2 font-semibold tracking-wider uppercase">Lokasi Kerja</p>
-                        <p className="font-bold text-base text-purple-100 truncate relative z-10">{member.venue}</p>
+                        <p className="font-bold text-base text-purple-100 truncate relative z-10">{getVenue()}</p>
                     </div>
                 </div>
 
@@ -169,12 +180,24 @@ export default function MemberLayout({
                         {/* User Info */}
                         <div className="flex items-center gap-4">
                             <div className="text-right hidden sm:block">
-                                <p className="text-sm font-bold text-white mb-0.5">{member.nickname}</p>
-                                <p className="text-xs text-gray-400 font-medium">{member.position}</p>
+                                <p className="text-sm font-bold text-white mb-0.5">{getNickname()}</p>
+                                <p className="text-xs text-gray-400 font-medium capitalize">{profile.role}</p>
                             </div>
-                            <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center text-white font-bold text-lg shadow-xl shadow-purple-900/40 border-2 border-white/10 hover:scale-105 transition-transform cursor-pointer">
-                                {member.nickname?.charAt(0) || 'U'}
-                            </div>
+                            {profile.profile_photo ? (
+                                <div className="w-12 h-12 rounded-xl overflow-hidden shadow-xl shadow-purple-900/40 border-2 border-white/10 hover:scale-105 transition-transform cursor-pointer">
+                                    <Image
+                                        src={profile.profile_photo}
+                                        alt={profile.full_name}
+                                        width={48}
+                                        height={48}
+                                        className="w-full h-full object-cover"
+                                    />
+                                </div>
+                            ) : (
+                                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center text-white font-bold text-lg shadow-xl shadow-purple-900/40 border-2 border-white/10 hover:scale-105 transition-transform cursor-pointer">
+                                    {getNickname().charAt(0).toUpperCase()}
+                                </div>
+                            )}
                         </div>
                     </div>
                 </header>

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion } from 'motion/react';
 import {
     Plus,
@@ -9,52 +9,70 @@ import {
     Trash2,
     MapPin,
     Briefcase,
-    Eye,
     X,
     Save,
     Upload,
-    Image as ImageIcon
+    Image as ImageIcon,
+    Loader2,
+    RefreshCw
 } from 'lucide-react';
-import Image from 'next/image';
-
-// Sample lowongan data
-const initialLowongan = [
-    { id: 1, name: 'Venetian Havana', city: 'Bandung', position: 'Terapis Spa', featured: true, status: 'active', image: '' },
-    { id: 2, name: 'Denver Club', city: 'Bandung', position: 'Ladies Karaoke', featured: false, status: 'active', image: '' },
-    { id: 3, name: 'Denver Spa', city: 'Bandung', position: 'Terapis Spa', featured: false, status: 'active', image: '' },
-    { id: 4, name: 'Vender Club', city: 'Bandung', position: 'Ladies Karaoke', featured: false, status: 'active', image: '' },
-    { id: 5, name: '80 Spa', city: 'Bandung', position: 'Terapis Spa', featured: false, status: 'active', image: '' },
-    { id: 6, name: 'Saga Vigour', city: 'Bandung', position: 'Terapis Spa', featured: false, status: 'inactive', image: '' },
-    { id: 7, name: 'Sultan Spa', city: 'Bandung', position: 'Terapis Spa', featured: false, status: 'active', image: '' },
-    { id: 8, name: 'LIV Club', city: 'Bandung', position: 'Ladies Karaoke', featured: false, status: 'active', image: '' },
-    { id: 9, name: 'Heritage', city: 'Bandung', position: 'Terapis Spa • Ladies Karaoke', featured: false, status: 'active', image: '' },
-];
+import {
+    getAllVenues,
+    createVenue,
+    updateVenue,
+    deleteVenue,
+    uploadVenueImage,
+    base64ToFile,
+    generateSlug,
+    type Venue,
+    type VenueInput
+} from '@/lib/venues';
 
 const cities = ['Bandung', 'Jakarta', 'Surabaya', 'Yogyakarta'];
 const positions = ['Terapis Spa', 'Ladies Karaoke', 'Terapis Spa • Ladies Karaoke'];
 
 export default function LowonganManagement() {
-    const [lowongan, setLowongan] = useState(initialLowongan);
+    const [venues, setVenues] = useState<Venue[]>([]);
     const [searchQuery, setSearchQuery] = useState('');
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [editingItem, setEditingItem] = useState<typeof initialLowongan[0] | null>(null);
-    const [formData, setFormData] = useState({
+    const [editingItem, setEditingItem] = useState<Venue | null>(null);
+    const [loading, setLoading] = useState(true);
+    const [saving, setSaving] = useState(false);
+    const [formData, setFormData] = useState<VenueInput>({
         name: '',
         city: 'Bandung',
         position: 'Terapis Spa',
         featured: false,
         status: 'active',
-        image: ''
+        image_url: ''
     });
 
-    // Filter lowongan by search
-    const filteredLowongan = lowongan.filter(item =>
+    // Load venues on mount
+    useEffect(() => {
+        loadVenues();
+    }, []);
+
+    const loadVenues = async () => {
+        setLoading(true);
+        try {
+            const data = await getAllVenues();
+            setVenues(data);
+        } catch (error) {
+            console.error('Error loading venues:', error);
+            alert('Gagal memuat data lowongan');
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    // Filter venues by search
+    const filteredVenues = venues.filter(item =>
         item.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
         item.city.toLowerCase().includes(searchQuery.toLowerCase())
     );
 
     // Open modal for new/edit
-    const openModal = (item?: typeof initialLowongan[0]) => {
+    const openModal = (item?: Venue) => {
         if (item) {
             setEditingItem(item);
             setFormData({
@@ -63,7 +81,7 @@ export default function LowonganManagement() {
                 position: item.position,
                 featured: item.featured,
                 status: item.status,
-                image: item.image || ''
+                image_url: item.image_url || ''
             });
         } else {
             setEditingItem(null);
@@ -73,7 +91,7 @@ export default function LowonganManagement() {
                 position: 'Terapis Spa',
                 featured: false,
                 status: 'active',
-                image: ''
+                image_url: ''
             });
         }
         setIsModalOpen(true);
@@ -85,36 +103,80 @@ export default function LowonganManagement() {
         if (file) {
             const reader = new FileReader();
             reader.onloadend = () => {
-                setFormData({ ...formData, image: reader.result as string });
+                setFormData({ ...formData, image_url: reader.result as string });
             };
             reader.readAsDataURL(file);
         }
     };
 
-    // Save lowongan
-    const handleSave = () => {
-        if (!formData.name) return;
-
-        if (editingItem) {
-            // Update existing
-            setLowongan(lowongan.map(item =>
-                item.id === editingItem.id ? { ...item, ...formData } : item
-            ));
-        } else {
-            // Add new
-            const newItem = {
-                id: Math.max(...lowongan.map(l => l.id)) + 1,
-                ...formData
-            };
-            setLowongan([...lowongan, newItem]);
+    // Save venue
+    const handleSave = async () => {
+        if (!formData.name) {
+            alert('Nama venue harus diisi');
+            return;
         }
-        setIsModalOpen(false);
+
+        setSaving(true);
+        try {
+            let imageUrl = formData.image_url;
+
+            // Upload image if it's base64 (new upload)
+            if (formData.image_url && formData.image_url.startsWith('data:')) {
+                const tempId = editingItem?.id || `temp-${Date.now()}`;
+                const file = base64ToFile(formData.image_url, `${tempId}.png`);
+                const uploadedUrl = await uploadVenueImage(file, tempId);
+                if (uploadedUrl) {
+                    imageUrl = uploadedUrl;
+                }
+            }
+
+            const venueData: VenueInput = {
+                ...formData,
+                image_url: imageUrl,
+                slug: formData.slug || generateSlug(formData.name)
+            };
+
+            if (editingItem) {
+                // Update existing
+                const updated = await updateVenue(editingItem.id, venueData);
+                if (updated) {
+                    await loadVenues();
+                    setIsModalOpen(false);
+                } else {
+                    alert('Gagal update lowongan');
+                }
+            } else {
+                // Add new
+                const created = await createVenue(venueData);
+                if (created) {
+                    await loadVenues();
+                    setIsModalOpen(false);
+                } else {
+                    alert('Gagal menambahkan lowongan');
+                }
+            }
+        } catch (error) {
+            console.error('Error saving venue:', error);
+            alert('Terjadi kesalahan saat menyimpan');
+        } finally {
+            setSaving(false);
+        }
     };
 
-    // Delete lowongan
-    const handleDelete = (id: number) => {
-        if (confirm('Yakin ingin menghapus lowongan ini?')) {
-            setLowongan(lowongan.filter(item => item.id !== id));
+    // Delete venue
+    const handleDelete = async (id: string) => {
+        if (!confirm('Yakin ingin menghapus lowongan ini?')) return;
+
+        try {
+            const success = await deleteVenue(id);
+            if (success) {
+                await loadVenues();
+            } else {
+                alert('Gagal menghapus lowongan');
+            }
+        } catch (error) {
+            console.error('Error deleting venue:', error);
+            alert('Terjadi kesalahan saat menghapus');
         }
     };
 
@@ -126,13 +188,23 @@ export default function LowonganManagement() {
                     <h1 className="text-3xl font-bold text-white mb-1">Lowongan Kerja</h1>
                     <p className="text-gray-400">Kelola semua lowongan kerja di website</p>
                 </div>
-                <button
-                    onClick={() => openModal()}
-                    className="inline-flex items-center gap-2 bg-gold-500 hover:bg-gold-600 text-black font-semibold px-6 py-3 rounded-xl transition-all"
-                >
-                    <Plus className="w-5 h-5" />
-                    Tambah Lowongan
-                </button>
+                <div className="flex items-center gap-3">
+                    <button
+                        onClick={loadVenues}
+                        disabled={loading}
+                        className="inline-flex items-center gap-2 bg-white/5 hover:bg-white/10 border border-white/10 text-white font-semibold px-4 py-3 rounded-xl transition-all disabled:opacity-50"
+                    >
+                        <RefreshCw className={`w-5 h-5 ${loading ? 'animate-spin' : ''}`} />
+                        Refresh
+                    </button>
+                    <button
+                        onClick={() => openModal()}
+                        className="inline-flex items-center gap-2 bg-gold-500 hover:bg-gold-600 text-black font-semibold px-6 py-3 rounded-xl transition-all"
+                    >
+                        <Plus className="w-5 h-5" />
+                        Tambah Lowongan
+                    </button>
+                </div>
             </div>
 
             {/* Search */}
@@ -147,90 +219,100 @@ export default function LowonganManagement() {
                 />
             </div>
 
-            {/* Table */}
-            <div className="glass rounded-xl overflow-hidden">
-                <div className="overflow-x-auto">
-                    <table className="w-full">
-                        <thead>
-                            <tr className="border-b border-white/10">
-                                <th className="text-left px-6 py-4 text-gray-400 font-medium">Nama Venue</th>
-                                <th className="text-left px-6 py-4 text-gray-400 font-medium">Kota</th>
-                                <th className="text-left px-6 py-4 text-gray-400 font-medium">Posisi</th>
-                                <th className="text-left px-6 py-4 text-gray-400 font-medium">Status</th>
-                                <th className="text-left px-6 py-4 text-gray-400 font-medium">Aksi</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {filteredLowongan.map((item) => (
-                                <motion.tr
-                                    key={item.id}
-                                    initial={{ opacity: 0 }}
-                                    animate={{ opacity: 1 }}
-                                    className="border-b border-white/5 hover:bg-white/5 transition-colors"
-                                >
-                                    <td className="px-6 py-4">
-                                        <div className="flex items-center gap-3">
-                                            <div className="w-10 h-10 bg-gold-500/20 rounded-lg flex items-center justify-center overflow-hidden">
-                                                {item.image ? (
-                                                    <img src={item.image} alt={item.name} className="w-full h-full object-cover" />
-                                                ) : (
-                                                    <Briefcase className="w-5 h-5 text-gold-500" />
-                                                )}
-                                            </div>
-                                            <div>
-                                                <p className="font-medium text-white">{item.name}</p>
-                                                {item.featured && (
-                                                    <span className="text-xs bg-gold-500 text-black px-2 py-0.5 rounded-full">Featured</span>
-                                                )}
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td className="px-6 py-4">
-                                        <div className="flex items-center gap-2 text-gray-300">
-                                            <MapPin className="w-4 h-4 text-gold-500" />
-                                            {item.city}
-                                        </div>
-                                    </td>
-                                    <td className="px-6 py-4 text-gray-300">{item.position}</td>
-                                    <td className="px-6 py-4">
-                                        <span className={`px-3 py-1 rounded-full text-xs font-medium ${item.status === 'active'
-                                                ? 'bg-green-500/20 text-green-400'
-                                                : 'bg-red-500/20 text-red-400'
-                                            }`}>
-                                            {item.status === 'active' ? 'Aktif' : 'Nonaktif'}
-                                        </span>
-                                    </td>
-                                    <td className="px-6 py-4">
-                                        <div className="flex items-center gap-2">
-                                            <button
-                                                onClick={() => openModal(item)}
-                                                className="p-2 hover:bg-white/10 rounded-lg transition-colors"
-                                                title="Edit"
-                                            >
-                                                <Edit className="w-4 h-4 text-gray-400 hover:text-white" />
-                                            </button>
-                                            <button
-                                                onClick={() => handleDelete(item.id)}
-                                                className="p-2 hover:bg-red-500/10 rounded-lg transition-colors"
-                                                title="Hapus"
-                                            >
-                                                <Trash2 className="w-4 h-4 text-gray-400 hover:text-red-400" />
-                                            </button>
-                                        </div>
-                                    </td>
-                                </motion.tr>
-                            ))}
-                        </tbody>
-                    </table>
+            {/* Loading State */}
+            {loading ? (
+                <div className="glass rounded-xl p-12 text-center">
+                    <Loader2 className="w-12 h-12 text-gold-500 mx-auto mb-4 animate-spin" />
+                    <p className="text-gray-400">Memuat data lowongan...</p>
                 </div>
+            ) : (
+                <>
+                    {/* Table */}
+                    <div className="glass rounded-xl overflow-hidden">
+                        <div className="overflow-x-auto">
+                            <table className="w-full">
+                                <thead>
+                                    <tr className="border-b border-white/10">
+                                        <th className="text-left px-6 py-4 text-gray-400 font-medium">Nama Venue</th>
+                                        <th className="text-left px-6 py-4 text-gray-400 font-medium">Kota</th>
+                                        <th className="text-left px-6 py-4 text-gray-400 font-medium">Posisi</th>
+                                        <th className="text-left px-6 py-4 text-gray-400 font-medium">Status</th>
+                                        <th className="text-left px-6 py-4 text-gray-400 font-medium">Aksi</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {filteredVenues.map((item) => (
+                                        <motion.tr
+                                            key={item.id}
+                                            initial={{ opacity: 0 }}
+                                            animate={{ opacity: 1 }}
+                                            className="border-b border-white/5 hover:bg-white/5 transition-colors"
+                                        >
+                                            <td className="px-6 py-4">
+                                                <div className="flex items-center gap-3">
+                                                    <div className="w-10 h-10 bg-gold-500/20 rounded-lg flex items-center justify-center overflow-hidden">
+                                                        {item.image_url ? (
+                                                            <img src={item.image_url} alt={item.name} className="w-full h-full object-cover" />
+                                                        ) : (
+                                                            <Briefcase className="w-5 h-5 text-gold-500" />
+                                                        )}
+                                                    </div>
+                                                    <div>
+                                                        <p className="font-medium text-white">{item.name}</p>
+                                                        {item.featured && (
+                                                            <span className="text-xs bg-gold-500 text-black px-2 py-0.5 rounded-full">Featured</span>
+                                                        )}
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td className="px-6 py-4">
+                                                <div className="flex items-center gap-2 text-gray-300">
+                                                    <MapPin className="w-4 h-4 text-gold-500" />
+                                                    {item.city}
+                                                </div>
+                                            </td>
+                                            <td className="px-6 py-4 text-gray-300">{item.position}</td>
+                                            <td className="px-6 py-4">
+                                                <span className={`px-3 py-1 rounded-full text-xs font-medium ${item.status === 'active'
+                                                    ? 'bg-green-500/20 text-green-400'
+                                                    : 'bg-red-500/20 text-red-400'
+                                                    }`}>
+                                                    {item.status === 'active' ? 'Aktif' : 'Nonaktif'}
+                                                </span>
+                                            </td>
+                                            <td className="px-6 py-4">
+                                                <div className="flex items-center gap-2">
+                                                    <button
+                                                        onClick={() => openModal(item)}
+                                                        className="p-2 hover:bg-white/10 rounded-lg transition-colors"
+                                                        title="Edit"
+                                                    >
+                                                        <Edit className="w-4 h-4 text-gray-400 hover:text-white" />
+                                                    </button>
+                                                    <button
+                                                        onClick={() => handleDelete(item.id)}
+                                                        className="p-2 hover:bg-red-500/10 rounded-lg transition-colors"
+                                                        title="Hapus"
+                                                    >
+                                                        <Trash2 className="w-4 h-4 text-gray-400 hover:text-red-400" />
+                                                    </button>
+                                                </div>
+                                            </td>
+                                        </motion.tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
 
-                {filteredLowongan.length === 0 && (
-                    <div className="text-center py-12">
-                        <Briefcase className="w-12 h-12 text-gray-600 mx-auto mb-3" />
-                        <p className="text-gray-400">Tidak ada lowongan ditemukan</p>
+                        {filteredVenues.length === 0 && (
+                            <div className="text-center py-12">
+                                <Briefcase className="w-12 h-12 text-gray-600 mx-auto mb-3" />
+                                <p className="text-gray-400">Tidak ada lowongan ditemukan</p>
+                            </div>
+                        )}
                     </div>
-                )}
-            </div>
+                </>
+            )}
 
             {/* Modal */}
             {isModalOpen && (
@@ -246,7 +328,8 @@ export default function LowonganManagement() {
                             </h2>
                             <button
                                 onClick={() => setIsModalOpen(false)}
-                                className="p-2 hover:bg-white/10 rounded-lg transition-colors"
+                                disabled={saving}
+                                className="p-2 hover:bg-white/10 rounded-lg transition-colors disabled:opacity-50"
                             >
                                 <X className="w-5 h-5 text-gray-400" />
                             </button>
@@ -258,8 +341,8 @@ export default function LowonganManagement() {
                                 <label className="block text-sm font-medium text-gray-300 mb-2">Logo Perusahaan</label>
                                 <div className="flex items-center gap-4">
                                     <div className="w-20 h-20 bg-white/5 border border-white/10 rounded-xl flex items-center justify-center overflow-hidden relative">
-                                        {formData.image ? (
-                                            <img src={formData.image} alt="Preview" className="w-full h-full object-cover" />
+                                        {formData.image_url ? (
+                                            <img src={formData.image_url} alt="Preview" className="w-full h-full object-cover" />
                                         ) : (
                                             <ImageIcon className="w-8 h-8 text-gray-500" />
                                         )}
@@ -273,6 +356,7 @@ export default function LowonganManagement() {
                                                 accept="image/*"
                                                 className="hidden"
                                                 onChange={handleImageUpload}
+                                                disabled={saving}
                                             />
                                         </label>
                                         <p className="text-xs text-gray-500 mt-2">Format: JPG, PNG, GIF (Max 2MB)</p>
@@ -289,6 +373,7 @@ export default function LowonganManagement() {
                                     onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                                     className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white focus:outline-none focus:border-gold-500/50"
                                     placeholder="Masukkan nama venue"
+                                    disabled={saving}
                                 />
                             </div>
 
@@ -299,6 +384,7 @@ export default function LowonganManagement() {
                                     value={formData.city}
                                     onChange={(e) => setFormData({ ...formData, city: e.target.value })}
                                     className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white focus:outline-none focus:border-gold-500/50"
+                                    disabled={saving}
                                 >
                                     {cities.map(city => (
                                         <option key={city} value={city}>{city}</option>
@@ -313,6 +399,7 @@ export default function LowonganManagement() {
                                     value={formData.position}
                                     onChange={(e) => setFormData({ ...formData, position: e.target.value })}
                                     className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white focus:outline-none focus:border-gold-500/50"
+                                    disabled={saving}
                                 >
                                     {positions.map(pos => (
                                         <option key={pos} value={pos}>{pos}</option>
@@ -329,6 +416,7 @@ export default function LowonganManagement() {
                                             checked={formData.featured}
                                             onChange={(e) => setFormData({ ...formData, featured: e.target.checked })}
                                             className="w-5 h-5 rounded border-white/20 bg-white/5 text-gold-500 focus:ring-gold-500"
+                                            disabled={saving}
                                         />
                                         <span className="text-gray-300">Featured</span>
                                     </label>
@@ -340,6 +428,7 @@ export default function LowonganManagement() {
                                             checked={formData.status === 'active'}
                                             onChange={(e) => setFormData({ ...formData, status: e.target.checked ? 'active' : 'inactive' })}
                                             className="w-5 h-5 rounded border-white/20 bg-white/5 text-gold-500 focus:ring-gold-500"
+                                            disabled={saving}
                                         />
                                         <span className="text-gray-300">Aktif</span>
                                     </label>
@@ -351,16 +440,27 @@ export default function LowonganManagement() {
                         <div className="flex gap-3 mt-6">
                             <button
                                 onClick={() => setIsModalOpen(false)}
-                                className="flex-1 px-4 py-3 bg-white/5 hover:bg-white/10 text-white font-medium rounded-xl transition-all"
+                                disabled={saving}
+                                className="flex-1 px-4 py-3 bg-white/5 hover:bg-white/10 text-white font-medium rounded-xl transition-all disabled:opacity-50"
                             >
                                 Batal
                             </button>
                             <button
                                 onClick={handleSave}
-                                className="flex-1 flex items-center justify-center gap-2 bg-gold-500 hover:bg-gold-600 text-black font-semibold px-4 py-3 rounded-xl transition-all"
+                                disabled={saving}
+                                className="flex-1 flex items-center justify-center gap-2 bg-gold-500 hover:bg-gold-600 text-black font-semibold px-4 py-3 rounded-xl transition-all disabled:opacity-50"
                             >
-                                <Save className="w-4 h-4" />
-                                Simpan
+                                {saving ? (
+                                    <>
+                                        <Loader2 className="w-4 h-4 animate-spin" />
+                                        Menyimpan...
+                                    </>
+                                ) : (
+                                    <>
+                                        <Save className="w-4 h-4" />
+                                        Simpan
+                                    </>
+                                )}
                             </button>
                         </div>
                     </motion.div>
@@ -369,4 +469,3 @@ export default function LowonganManagement() {
         </div>
     );
 }
-
