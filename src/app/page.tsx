@@ -173,7 +173,7 @@ export default function HomePage() {
                         </p>
                     </motion.div>
 
-                    <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <div className="flex md:grid overflow-x-auto md:overflow-visible pb-8 md:pb-0 gap-4 md:gap-6 snap-x snap-mandatory md:grid-cols-2 lg:grid-cols-4 scrollbar-hide -mx-4 px-4 md:mx-0 md:px-0">
                         {whyChooseData.map((item, index) => (
                             <motion.div
                                 key={index}
@@ -181,7 +181,7 @@ export default function HomePage() {
                                 whileInView={{ opacity: 1, y: 0 }}
                                 viewport={{ once: true }}
                                 transition={{ delay: index * 0.1 }}
-                                className="glass-gold p-6 rounded-xl hover:scale-105 transition-all duration-300 group"
+                                className="min-w-[85vw] sm:min-w-[300px] md:min-w-0 snap-center glass-gold p-6 rounded-xl hover:scale-105 transition-all duration-300 group"
                             >
                                 <div className="w-14 h-14 bg-gold-500/20 rounded-xl flex items-center justify-center mb-4 group-hover:bg-gold-500/30 transition-colors">
                                     <item.icon className="w-7 h-7 text-gold-500" />
