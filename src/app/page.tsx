@@ -173,7 +173,7 @@ export default function HomePage() {
                         </p>
                     </motion.div>
 
-                    <div className="flex md:grid overflow-x-auto md:overflow-visible pb-8 md:pb-0 gap-4 md:gap-6 snap-x snap-mandatory md:grid-cols-2 lg:grid-cols-4 scrollbar-hide -mx-4 px-4 md:mx-0 md:px-0">
+                    <div className="flex md:grid overflow-x-auto md:overflow-visible pb-12 md:pb-0 gap-6 snap-x snap-mandatory md:grid-cols-2 lg:grid-cols-4 scrollbar-hide -mx-4 px-6 md:mx-0 md:px-0">
                         {whyChooseData.map((item, index) => (
                             <motion.div
                                 key={index}
@@ -181,13 +181,16 @@ export default function HomePage() {
                                 whileInView={{ opacity: 1, y: 0 }}
                                 viewport={{ once: true }}
                                 transition={{ delay: index * 0.1 }}
-                                className="min-w-[85vw] sm:min-w-[300px] md:min-w-0 snap-center glass-gold p-6 rounded-xl hover:scale-105 transition-all duration-300 group"
+                                className="min-w-[75vw] sm:min-w-[320px] md:min-w-0 snap-center relative group"
                             >
-                                <div className="w-14 h-14 bg-gold-500/20 rounded-xl flex items-center justify-center mb-4 group-hover:bg-gold-500/30 transition-colors">
-                                    <item.icon className="w-7 h-7 text-gold-500" />
+                                <div className="absolute inset-0 bg-gradient-to-br from-gold-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-2xl" />
+                                <div className="relative h-full glass-card p-8 rounded-2xl border border-white/5 hover:border-gold-500/30 transition-all duration-300 flex flex-col items-start bg-[#0a0a0a]/40 backdrop-blur-sm">
+                                    <div className="w-16 h-16 bg-gradient-to-br from-gold-500/20 to-gold-500/5 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300 border border-gold-500/10">
+                                        <item.icon className="w-8 h-8 text-gold-500" />
+                                    </div>
+                                    <h3 className="text-xl font-bold text-white mb-3 group-hover:text-gold-400 transition-colors">{item.title}</h3>
+                                    <p className="text-gray-400 text-sm leading-relaxed">{item.description}</p>
                                 </div>
-                                <h3 className="text-xl font-semibold text-white mb-2">{item.title}</h3>
-                                <p className="text-gray-400 text-sm leading-relaxed">{item.description}</p>
                             </motion.div>
                         ))}
                     </div>
