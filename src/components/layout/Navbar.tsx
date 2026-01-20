@@ -104,30 +104,30 @@ export default function Navbar() {
                             animate={{ opacity: 1, height: 'auto' }}
                             exit={{ opacity: 0, height: 0 }}
                             transition={{ duration: 0.3 }}
-                            className="lg:hidden overflow-hidden"
+                            className="lg:hidden overflow-hidden absolute top-20 left-0 right-0 bg-[#050505]/95 backdrop-blur-xl border-b border-white/10 shadow-2xl"
                         >
-                            <div className="py-4 space-y-4">
+                            <div className="container-custom py-6 space-y-4">
                                 {navLinks.map((link, index) => (
                                     <motion.div
                                         key={link.href}
                                         initial={{ opacity: 0, x: -20 }}
                                         animate={{ opacity: 1, x: 0 }}
-                                        transition={{ delay: index * 0.1 }}
+                                        transition={{ delay: index * 0.05 }}
                                     >
                                         <Link
                                             href={link.href}
                                             onClick={() => setIsMobileMenuOpen(false)}
-                                            className="block px-4 py-2 text-gray-300 hover:text-white hover:bg-white/10 rounded-lg transition-all"
+                                            className="block px-4 py-3 text-gray-300 hover:text-white hover:bg-white/5 rounded-xl transition-all font-medium"
                                         >
                                             {link.label}
                                         </Link>
                                     </motion.div>
                                 ))}
-                                <div className="pt-4 border-t border-white/10 space-y-3">
+                                <div className="pt-6 border-t border-white/10 space-y-3 px-4">
                                     <Link
                                         href="/login"
                                         onClick={() => setIsMobileMenuOpen(false)}
-                                        className="btn-secondary w-full flex items-center justify-center space-x-2"
+                                        className="btn-secondary w-full flex items-center justify-center space-x-2 py-3"
                                     >
                                         <LogIn className="w-5 h-5" />
                                         <span>Masuk</span>
@@ -135,7 +135,7 @@ export default function Navbar() {
                                     <Link
                                         href="/register"
                                         onClick={() => setIsMobileMenuOpen(false)}
-                                        className="btn-primary w-full flex items-center justify-center space-x-2"
+                                        className="btn-primary w-full flex items-center justify-center space-x-2 py-3"
                                     >
                                         <User className="w-5 h-5" />
                                         <span>Daftar Sekarang</span>
