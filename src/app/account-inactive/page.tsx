@@ -79,7 +79,7 @@ export default function AccountInactivePage() {
                             📧 Email: <a href="mailto:admin@liguns.com" className="text-blue-400 hover:underline">admin@liguns.com</a>
                         </p>
                         <p className="text-gray-300">
-                            📱 WhatsApp: <a href="https://wa.me/6281234567890" className="text-blue-400 hover:underline">+62 812-3456-7890</a>
+                            📱 WhatsApp: <a href="https://wa.me/6289669094929" className="text-blue-400 hover:underline">+62 896-6909-4929</a>
                         </p>
                     </div>
                 </div>

@@ -44,7 +44,8 @@ export default function LowonganManagement() {
         position: 'Terapis Spa',
         featured: false,
         status: 'active',
-        image_url: ''
+        image_url: '',
+        logo_url: ''
     });
 
     // Load venues on mount
@@ -81,7 +82,8 @@ export default function LowonganManagement() {
                 position: item.position,
                 featured: item.featured,
                 status: item.status,
-                image_url: item.image_url || ''
+                image_url: item.image_url || '',
+                logo_url: item.logo_url || ''
             });
         } else {
             setEditingItem(null);
@@ -91,7 +93,8 @@ export default function LowonganManagement() {
                 position: 'Terapis Spa',
                 featured: false,
                 status: 'active',
-                image_url: ''
+                image_url: '',
+                logo_url: ''
             });
         }
         setIsModalOpen(true);
@@ -109,6 +112,18 @@ export default function LowonganManagement() {
         }
     };
 
+    // Handle Logo Upload
+    const handleLogoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                setFormData({ ...formData, logo_url: reader.result as string });
+            };
+            reader.readAsDataURL(file);
+        }
+    };
+
     // Save venue
     const handleSave = async () => {
         if (!formData.name) {
@@ -119,20 +134,32 @@ export default function LowonganManagement() {
         setSaving(true);
         try {
             let imageUrl = formData.image_url;
+            let logoUrl = formData.logo_url;
 
-            // Upload image if it's base64 (new upload)
+            // Upload main image if it's base64 (new upload)
             if (formData.image_url && formData.image_url.startsWith('data:')) {
                 const tempId = editingItem?.id || `temp-${Date.now()}`;
-                const file = base64ToFile(formData.image_url, `${tempId}.png`);
+                const file = base64ToFile(formData.image_url, `${tempId}-image.png`);
                 const uploadedUrl = await uploadVenueImage(file, tempId);
                 if (uploadedUrl) {
                     imageUrl = uploadedUrl;
                 }
             }
 
+            // Upload logo if it's base64 (new upload)
+            if (formData.logo_url && formData.logo_url.startsWith('data:')) {
+                const tempId = editingItem?.id || `temp-${Date.now()}`;
+                const file = base64ToFile(formData.logo_url, `${tempId}-logo.png`);
+                const uploadedUrl = await uploadVenueImage(file, tempId);
+                if (uploadedUrl) {
+                    logoUrl = uploadedUrl;
+                }
+            }
+
             const venueData: VenueInput = {
                 ...formData,
                 image_url: imageUrl,
+                logo_url: logoUrl,
                 slug: formData.slug || generateSlug(formData.name)
             };
 
@@ -336,13 +363,41 @@ export default function LowonganManagement() {
                         </div>
 
                         <div className="space-y-4">
-                            {/* Image Upload */}
+                            {/* Main Image Upload */}
                             <div>
-                                <label className="block text-sm font-medium text-gray-300 mb-2">Logo Perusahaan</label>
+                                <label className="block text-sm font-medium text-gray-300 mb-2">Gambar Utama</label>
                                 <div className="flex items-center gap-4">
                                     <div className="w-20 h-20 bg-white/5 border border-white/10 rounded-xl flex items-center justify-center overflow-hidden relative">
                                         {formData.image_url ? (
                                             <img src={formData.image_url} alt="Preview" className="w-full h-full object-cover" />
+                                        ) : (
+                                            <ImageIcon className="w-8 h-8 text-gray-500" />
+                                        )}
+                                    </div>
+                                    <div className="flex-1">
+                                        <label className="cursor-pointer inline-flex items-center gap-2 bg-white/5 hover:bg-white/10 text-white font-medium px-4 py-2 rounded-lg transition-all border border-white/10">
+                                            <Upload className="w-4 h-4" />
+                                            Upload Gambar
+                                            <input
+                                                type="file"
+                                                accept="image/*"
+                                                className="hidden"
+                                                onChange={handleImageUpload}
+                                                disabled={saving}
+                                            />
+                                        </label>
+                                        <p className="text-xs text-gray-500 mt-2">Format: JPG, PNG, GIF (Max 2MB)</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Logo Upload */}
+                            <div>
+                                <label className="block text-sm font-medium text-gray-300 mb-2">Logo Perusahaan</label>
+                                <div className="flex items-center gap-4">
+                                    <div className="w-20 h-20 bg-white/5 border border-white/10 rounded-xl flex items-center justify-center overflow-hidden relative">
+                                        {formData.logo_url ? (
+                                            <img src={formData.logo_url} alt="Logo" className="w-full h-full object-contain p-2" />
                                         ) : (
                                             <ImageIcon className="w-8 h-8 text-gray-500" />
                                         )}
@@ -355,11 +410,11 @@ export default function LowonganManagement() {
                                                 type="file"
                                                 accept="image/*"
                                                 className="hidden"
-                                                onChange={handleImageUpload}
+                                                onChange={handleLogoUpload}
                                                 disabled={saving}
                                             />
                                         </label>
-                                        <p className="text-xs text-gray-500 mt-2">Format: JPG, PNG, GIF (Max 2MB)</p>
+                                        <p className="text-xs text-gray-500 mt-2">Format: JPG, PNG (Logo transparan lebih baik)</p>
                                     </div>
                                 </div>
                             </div>

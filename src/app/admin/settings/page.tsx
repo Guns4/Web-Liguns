@@ -24,7 +24,7 @@ export default function SettingsPage() {
         phone: '+62 812-3456-7890',
         address: 'Jakarta, Indonesia',
         instagram: 'https://instagram.com/ligunsofficial',
-        whatsapp: 'https://wa.me/6281234567890',
+        whatsapp: 'https://wa.me/6289669094929',
         tiktok: 'https://tiktok.com/@ligunsofficial'
     });
 

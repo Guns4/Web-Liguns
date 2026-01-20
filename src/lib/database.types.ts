@@ -104,6 +104,7 @@ export interface Database {
                     province: string | null
                     map_url: string | null
                     image_url: string | null
+                    logo_url: string | null
                     gallery: string[]
                     is_active: boolean
                     slots_available: number
@@ -129,6 +130,7 @@ export interface Database {
                     province?: string | null
                     map_url?: string | null
                     image_url?: string | null
+                    logo_url?: string | null
                     gallery?: string[]
                     is_active?: boolean
                     slots_available?: number
@@ -154,6 +156,7 @@ export interface Database {
                     province?: string | null
                     map_url?: string | null
                     image_url?: string | null
+                    logo_url?: string | null
                     gallery?: string[]
                     is_active?: boolean
                     slots_available?: number
