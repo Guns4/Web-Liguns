@@ -1,6 +1,9 @@
 import { createClient } from '@supabase/supabase-js';
 import { Database, Profile, Job, JobApplication, Attendance, FinancialRecord, StoreItem } from './database.types';
 
+// Export types for easier imports
+export type { Database, Profile, Job, JobApplication, Attendance, FinancialRecord, StoreItem };
+
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '';
 
