@@ -7,7 +7,7 @@ import { motion } from 'motion/react';
 import { User, LogIn, AlertCircle } from 'lucide-react';
 
 // Simple username validation - no password required
-const ADMIN_USERNAME = 'Adminligunsituguntur';
+const ADMIN_USERNAMES = ['guntuurm04', 'Adminliguns04', 'ligunsadmin04'];
 
 export default function AdminLoginPage() {
     const router = useRouter();
@@ -23,7 +23,7 @@ export default function AdminLoginPage() {
         // Simulate brief loading
         await new Promise(resolve => setTimeout(resolve, 500));
 
-        if (username === ADMIN_USERNAME) {
+        if (ADMIN_USERNAMES.includes(username)) {
             // Store login state in localStorage
             localStorage.setItem('adminLoggedIn', 'true');
             localStorage.setItem('adminUsername', username);
