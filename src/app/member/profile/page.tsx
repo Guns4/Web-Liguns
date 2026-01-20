@@ -73,7 +73,7 @@ export default function MemberProfilePage() {
                     bio: formData.bio,
                     height: formData.height ? parseFloat(formData.height) : null,
                     weight: formData.weight ? parseFloat(formData.weight) : null,
-                    gender: formData.gender || null,
+                    gender: (formData.gender as "male" | "female") || null,
                     date_of_birth: formData.date_of_birth || null,
                     education: formData.education,
                     experience: formData.experience,
