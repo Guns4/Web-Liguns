@@ -47,22 +47,6 @@ export default function Footer() {
                             />
                         </Link>
 
-                        {/* Contact Info */}
-                        <div className="space-y-2 mb-4">
-                            <div className="flex items-center space-x-2 text-gray-400 text-sm">
-                                <Mail className="w-4 h-4 text-gold-500" />
-                                <span>info@liguns-entertain.com</span>
-                            </div>
-                            <div className="flex items-center space-x-2 text-gray-400 text-sm">
-                                <Phone className="w-4 h-4 text-gold-500" />
-                                <span>+62 812-3456-7890</span>
-                            </div>
-                            <div className="flex items-center space-x-2 text-gray-400 text-sm">
-                                <MapPin className="w-4 h-4 text-gold-500" />
-                                <span>Bandung, Indonesia</span>
-                            </div>
-                        </div>
-
                         {/* Social Media */}
                         <div className="flex items-center space-x-4">
                             {socialLinks.map((social) => (
@@ -143,7 +127,7 @@ export default function Footer() {
                 {/* Copyright - Centered */}
                 <div className="mt-10 pt-6 border-t border-white/10">
                     <p className="text-gray-400 text-sm text-center">
-                        © 2026 Liguns Entertainment. All rights reserved.
+                        © 2023 Liguns Entertainment. All rights reserved.
                     </p>
                 </div>
             </div>

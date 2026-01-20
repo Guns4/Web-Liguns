@@ -510,6 +510,315 @@ export interface Database {
                     }
                 ]
             }
+            site_settings: {
+                Row: {
+                    id: string
+                    company_name: string
+                    company_tagline: string | null
+                    company_description: string | null
+                    company_logo_url: string | null
+                    company_favicon_url: string | null
+                    contact_email: string | null
+                    contact_phone: string | null
+                    contact_whatsapp: string | null
+                    contact_address: string | null
+                    social_instagram: string | null
+                    social_tiktok: string | null
+                    social_facebook: string | null
+                    social_twitter: string | null
+                    social_youtube: string | null
+                    social_linkedin: string | null
+                    seo_title: string | null
+                    seo_description: string | null
+                    seo_keywords: string | null
+                    google_analytics_id: string | null
+                    maintenance_mode: boolean
+                    maintenance_message: string | null
+                    updated_at: string
+                }
+                Insert: {
+                    id?: string
+                    company_name: string
+                    company_tagline?: string | null
+                    company_description?: string | null
+                    company_logo_url?: string | null
+                    company_favicon_url?: string | null
+                    contact_email?: string | null
+                    contact_phone?: string | null
+                    contact_whatsapp?: string | null
+                    contact_address?: string | null
+                    social_instagram?: string | null
+                    social_tiktok?: string | null
+                    social_facebook?: string | null
+                    social_twitter?: string | null
+                    social_youtube?: string | null
+                    social_linkedin?: string | null
+                    seo_title?: string | null
+                    seo_description?: string | null
+                    seo_keywords?: string | null
+                    google_analytics_id?: string | null
+                    maintenance_mode?: boolean
+                    maintenance_message?: string | null
+                    updated_at?: string
+                }
+                Update: {
+                    id?: string
+                    company_name?: string
+                    company_tagline?: string | null
+                    company_description?: string | null
+                    company_logo_url?: string | null
+                    company_favicon_url?: string | null
+                    contact_email?: string | null
+                    contact_phone?: string | null
+                    contact_whatsapp?: string | null
+                    contact_address?: string | null
+                    social_instagram?: string | null
+                    social_tiktok?: string | null
+                    social_facebook?: string | null
+                    social_twitter?: string | null
+                    social_youtube?: string | null
+                    social_linkedin?: string | null
+                    seo_title?: string | null
+                    seo_description?: string | null
+                    seo_keywords?: string | null
+                    google_analytics_id?: string | null
+                    maintenance_mode?: boolean
+                    maintenance_message?: string | null
+                    updated_at?: string
+                }
+                Relationships: []
+            }
+            navigation_items: {
+                Row: {
+                    id: string
+                    label: string
+                    url: string
+                    icon: string | null
+                    display_order: number
+                    is_active: boolean
+                    open_new_tab: boolean
+                    parent_id: string | null
+                    visibility: 'public' | 'member' | 'admin'
+                }
+                Insert: {
+                    id?: string
+                    label: string
+                    url: string
+                    icon?: string | null
+                    display_order?: number
+                    is_active?: boolean
+                    open_new_tab?: boolean
+                    parent_id?: string | null
+                    visibility?: 'public' | 'member' | 'admin'
+                }
+                Update: {
+                    id?: string
+                    label?: string
+                    url?: string
+                    icon?: string | null
+                    display_order?: number
+                    is_active?: boolean
+                    open_new_tab?: boolean
+                    parent_id?: string | null
+                    visibility?: 'public' | 'member' | 'admin'
+                }
+                Relationships: []
+            }
+            content_sections: {
+                Row: {
+                    id: string
+                    section_key: string
+                    section_name: string
+                    title: string | null
+                    subtitle: string | null
+                    description: string | null
+                    content: Json
+                    image_url: string | null
+                    video_url: string | null
+                    background_image_url: string | null
+                    is_active: boolean
+                    display_order: number
+                    background_color: string | null
+                    text_color: string | null
+                }
+                Insert: {
+                    id?: string
+                    section_key: string
+                    section_name: string
+                    title?: string | null
+                    subtitle?: string | null
+                    description?: string | null
+                    content?: Json
+                    image_url?: string | null
+                    video_url?: string | null
+                    background_image_url?: string | null
+                    is_active?: boolean
+                    display_order?: number
+                    background_color?: string | null
+                    text_color?: string | null
+                }
+                Update: {
+                    id?: string
+                    section_key?: string
+                    section_name?: string
+                    title?: string | null
+                    subtitle?: string | null
+                    description?: string | null
+                    content?: Json
+                    image_url?: string | null
+                    video_url?: string | null
+                    background_image_url?: string | null
+                    is_active?: boolean
+                    display_order?: number
+                    background_color?: string | null
+                    text_color?: string | null
+                }
+                Relationships: []
+            }
+            services: {
+                Row: {
+                    id: string
+                    name: string
+                    slug: string
+                    description: string | null
+                    short_description: string | null
+                    icon: string | null
+                    image_url: string | null
+                    features: Json
+                    starting_price: number | null
+                    price_display: string | null
+                    is_featured: boolean
+                    is_active: boolean
+                    display_order: number
+                    cta_text: string
+                    cta_url: string | null
+                }
+                Insert: {
+                    id?: string
+                    name: string
+                    slug: string
+                    description?: string | null
+                    short_description?: string | null
+                    icon?: string | null
+                    image_url?: string | null
+                    features?: Json
+                    starting_price?: number | null
+                    price_display?: string | null
+                    is_featured?: boolean
+                    is_active?: boolean
+                    display_order?: number
+                    cta_text: string
+                    cta_url?: string | null
+                }
+                Update: {
+                    id?: string
+                    name?: string
+                    slug?: string
+                    description?: string | null
+                    short_description?: string | null
+                    icon?: string | null
+                    image_url?: string | null
+                    features?: Json
+                    starting_price?: number | null
+                    price_display?: string | null
+                    is_featured?: boolean
+                    is_active?: boolean
+                    display_order?: number
+                    cta_text?: string
+                    cta_url?: string | null
+                }
+                Relationships: []
+            }
+            testimonials: {
+                Row: {
+                    id: string
+                    name: string
+                    position: string | null
+                    company: string | null
+                    avatar_url: string | null
+                    content: string
+                    rating: number | null
+                    is_featured: boolean
+                    is_active: boolean
+                    display_order: number
+                }
+                Insert: {
+                    id?: string
+                    name: string
+                    position?: string | null
+                    company?: string | null
+                    avatar_url?: string | null
+                    content: string
+                    rating?: number | null
+                    is_featured?: boolean
+                    is_active?: boolean
+                    display_order?: number
+                }
+                Update: {
+                    id?: string
+                    name?: string
+                    position?: string | null
+                    company?: string | null
+                    avatar_url?: string | null
+                    content?: string
+                    rating?: number | null
+                    is_featured?: boolean
+                    is_active?: boolean
+                    display_order?: number
+                }
+                Relationships: []
+            }
+            venues: {
+                Row: {
+                    id: string
+                    name: string
+                    city: string
+                    position: string
+                    featured: boolean
+                    status: 'active' | 'inactive'
+                    image_url: string | null
+                    logo_url: string | null
+                    slug: string | null
+                    detail_page_url: string | null
+                    metadata: Json
+                    display_order: number
+                    created_at: string
+                    updated_at: string
+                }
+                Insert: {
+                    id?: string
+                    name: string
+                    city: string
+                    position: string
+                    featured?: boolean
+                    status?: 'active' | 'inactive'
+                    image_url?: string | null
+                    logo_url?: string | null
+                    slug?: string | null
+                    detail_page_url?: string | null
+                    metadata?: Json
+                    display_order?: number
+                    created_at?: string
+                    updated_at?: string
+                }
+                Update: {
+                    id?: string
+                    name?: string
+                    city?: string
+                    position?: string
+                    featured?: boolean
+                    status?: 'active' | 'inactive'
+                    image_url?: string | null
+                    logo_url?: string | null
+                    slug?: string | null
+                    detail_page_url?: string | null
+                    metadata?: Json
+                    display_order?: number
+                    created_at?: string
+                    updated_at?: string
+                }
+                Relationships: []
+            }
         }
         Views: {
             [_ in never]: never
@@ -578,3 +887,7 @@ export type AttendanceStatus = Attendance['status']
 export type FinancialRecordType = FinancialRecord['type']
 export type StoreItemCategory = StoreItem['category']
 export type PurchaseStatus = StorePurchase['status']
+
+export type Venue = Database['public']['Tables']['venues']['Row']
+export type VenueInsert = Database['public']['Tables']['venues']['Insert']
+export type VenueUpdate = Database['public']['Tables']['venues']['Update']

@@ -64,7 +64,7 @@ export function SkeletonText({ width = 'full' }) {
     return <div className={`h-4 ${widthClass} bg-white/10 rounded animate-pulse`} />;
 }
 
-export function SkeletonAvatar({ size = 'md' }) {
+export function SkeletonAvatar({ size = 'md' }: { size?: 'sm' | 'md' | 'lg' | 'xl' }) {
     const sizeClasses = {
         sm: 'w-8 h-8',
         md: 'w-12 h-12',

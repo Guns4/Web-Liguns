@@ -176,7 +176,7 @@ export async function createNavigationItem(item: Partial<NavigationItem>): Promi
     try {
         const { data, error } = await supabase
             .from('navigation_items')
-            .insert(item)
+            .insert(item as any)
             .select()
             .single();
 
@@ -354,7 +354,7 @@ export async function createService(service: Partial<Service>): Promise<Service 
     try {
         const { data, error } = await supabase
             .from('services')
-            .insert(service)
+            .insert(service as any)
             .select()
             .single();
 
@@ -452,7 +452,7 @@ export async function createTestimonial(testimonial: Partial<Testimonial>): Prom
     try {
         const { data, error } = await supabase
             .from('testimonials')
-            .insert(testimonial)
+            .insert(testimonial as any)
             .select()
             .single();
 
