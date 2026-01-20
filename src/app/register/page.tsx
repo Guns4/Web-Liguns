@@ -112,11 +112,11 @@ export default function RegisterPage() {
                 id: authData.user.id,
                 email: formData.email,
                 full_name: formData.fullName,
-                role: 'talent', // Default role for new registration
+                role: 'talent' as 'talent', // Default role for new registration
                 phone: formData.phone || null,
                 // Store nickname, position, dan venue di bio untuk sementara
                 bio: `Nickname: ${formData.nickname} | Posisi: ${formData.position} | Venue: ${formData.venue}`,
-                status: 'interview', // Default status
+                status: 'interview' as 'interview', // Default status
             };
 
             const { error: profileError } = await supabase
