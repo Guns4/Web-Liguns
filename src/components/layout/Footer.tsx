@@ -2,11 +2,7 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
-import {
-    Mail,
-    Phone,
-    MapPin,
-} from 'lucide-react';
+
 import { motion } from 'motion/react';
 
 export default function Footer() {

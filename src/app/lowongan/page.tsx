@@ -105,10 +105,10 @@ export default function LowonganPage() {
                     className="text-center mb-12"
                 >
                     <h1 className="text-4xl md:text-5xl font-bold mb-4">
-                        Lowongan Kerja <span className="text-gold-gradient">Tersedia</span>
+                        Info Lowongan <span className="text-gold-gradient">Hiburan Malam</span> Terbaru
                     </h1>
                     <p className="text-gray-400 text-lg max-w-2xl mx-auto">
-                        Bergabunglah dengan tim profesional kami di berbagai kota di Indonesia
+                        Temukan loker LC dan Terapis Spa gaji tinggi di Bandung dan kota besar lainnya.
                     </p>
                 </motion.div>
 

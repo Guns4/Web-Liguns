@@ -33,8 +33,8 @@ const faqData = [
         answer: 'Kami sangat menjaga privasi dan keamanan data seluruh talent dan partner. Data Anda tidak akan dibagikan tanpa izin.'
     },
     {
-        question: 'Apakah ada biaya pendaftaran?',
-        answer: 'Tidak ada biaya pendaftaran untuk menjadi talent di Liguns. Semua proses gratis dan transparan.'
+        question: 'Apakah ada lowongan untuk pemula tanpa pengalaman?',
+        answer: 'Tentu saja! Kami membuka lowongan hiburan malam di Bandung untuk pemula maupun yang sudah berpengalaman. Liguns memberikan pelatihan penuh untuk menjadi LC atau Terapis profesional.'
     }
 ];
 
@@ -125,16 +125,16 @@ export default function HomePage() {
                         className="text-center"
                     >
                         <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold leading-tight mb-8">
-                            Membangun Karier{' '}
-                            <span className="text-gold-gradient">Profesional</span>
+                            Pusat Lowongan Kerja{' '}
+                            <span className="text-gold-gradient">Hiburan Malam</span>
                             <br />
-                            di Industri Hiburan Malam
+                            di Bandung & Sekitarnya
                         </h1>
                         <p className="text-lg md:text-xl text-gray-400 mb-10 leading-relaxed max-w-3xl mx-auto px-4">
-                            Liguns Entertainment adalah agency profesional berbasis di Kota Bandung yang
-                            menghadirkan wadah aman, modern, dan elegan untuk penyaluran dan pengembangan
-                            karier wanita muda di karaoke dan Terapis Spa. Kami juga menyediakan layanan
-                            social media management & content creation.
+                            Liguns Entertainment adalah agency resmi penyalur kerja khusus wanita untuk posisi{' '}
+                            <strong className="text-white">Pemandu Lagu (LC)</strong> dan{' '}
+                            <strong className="text-white">Terapis Spa</strong>. Kami menjamin lingkungan kerja yang
+                            aman, profesional, dan berpenghasilan tinggi di venue-venue premium Kota Bandung.
                         </p>
                         <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
                             <Link

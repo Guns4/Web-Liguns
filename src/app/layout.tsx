@@ -20,20 +20,21 @@ const playfair = Playfair_Display({
 
 export const metadata: Metadata = {
     title: {
-        default: 'Liguns Entertainment - Premium Talent Agency Platform',
+        default: 'Loker Hiburan Malam Bandung - Agency LC & Terapis Spa Terpercaya',
         template: '%s | Liguns Entertainment',
     },
     description:
-        'Liguns Entertainment adalah talent agency premium yang menyediakan talenta berkualitas untuk industri nightlife (Karaoke/Spa) di Indonesia. Platform HRIS terpadu untuk Admin dan Talent.',
+        'Pusat info lowongan kerja hiburan malam di Bandung khusus wanita. Gaji tinggi, aman, & profesional. Loker LC (Pemandu Lagu) & Terapis Spa. Gabung sekarang!',
     keywords: [
-        'talent agency indonesia',
-        'lady companion',
-        'spa therapist',
-        'karaoke entertainment',
-        'nightlife jobs',
-        'premium talent',
+        'loker hiburan malam bandung',
+        'lowongan kerja lc bandung',
+        'loker pemandu lagu bandung',
+        'lowongan terapis spa bandung',
+        'loker wanita bandung',
+        'kerja malam gaji besar',
+        'agency lc terpercaya',
         'liguns entertainment',
-        'HRIS platform',
+        'nightlife jobs indonesia',
     ],
     authors: [{ name: 'Liguns Entertainment' }],
     creator: 'Liguns Entertainment',
@@ -44,19 +45,19 @@ export const metadata: Metadata = {
         telephone: false,
     },
     openGraph: {
-        title: 'Liguns Entertainment - Premium Talent Agency Platform',
+        title: 'Loker Hiburan Malam Bandung - Gaji Tinggi & Aman',
         description:
-            'Talent agency premium untuk nightlife industry dengan platform HRIS terpadu.',
-        url: 'https://liguns-entertainment.vercel.app',
+            'Info lowongan kerja terbaru untuk LC & Terapis Spa di Bandung. Agency resmi & profesional khusus wanita. Daftar gratis sekarang!',
+        url: 'https://ligunsentertainment.agency',
         siteName: 'Liguns Entertainment',
         locale: 'id_ID',
         type: 'website',
     },
     twitter: {
         card: 'summary_large_image',
-        title: 'Liguns Entertainment - Premium Talent Agency',
+        title: 'Loker Hiburan Malam Bandung - Liguns Entertainment',
         description:
-            'Premium talent agency untuk nightlife industry di Indonesia.',
+            'Lowongan kerja LC & Spa Therapist di Bandung. Gaji besar, aman, & fasilitas lengkap.',
     },
     robots: {
         index: true,
