@@ -116,7 +116,7 @@ export default function JobApplicationsPage() {
             const { error: appError } = await supabase
                 .from('job_applications')
                 .update({
-                    status: newStatus,
+                    status: newStatus as "pending" | "reviewed" | "interview" | "accepted" | "rejected",
                     reviewed_at: new Date().toISOString()
                 })
                 .eq('id', applicationId);
