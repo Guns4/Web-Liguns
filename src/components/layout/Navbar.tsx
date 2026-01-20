@@ -44,9 +44,9 @@ export default function Navbar() {
                         <Image
                             src="/logo.png"
                             alt="Liguns Entertainment"
-                            width={50}
-                            height={50}
-                            className="group-hover:scale-105 transition-transform duration-300"
+                            width={40}
+                            height={40}
+                            className="w-10 h-10 group-hover:scale-105 transition-transform duration-300 object-contain"
                             priority
                         />
                     </Link>
