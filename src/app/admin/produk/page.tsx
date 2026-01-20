@@ -134,7 +134,7 @@ export default function ProdukManagement() {
                     .from('store_items')
                     .update({
                         name: formData.name,
-                        category: formData.category,
+                        category: formData.category as "pulsa" | "fashion" | "makeup" | "accessories" | "other",
                         description: formData.description || null,
                         price: formData.price,
                         stock: formData.stock,
@@ -152,7 +152,7 @@ export default function ProdukManagement() {
                     .from('store_items')
                     .insert({
                         name: formData.name,
-                        category: formData.category,
+                        category: formData.category as "pulsa" | "fashion" | "makeup" | "accessories" | "other",
                         description: formData.description || null,
                         price: formData.price,
                         stock: formData.stock,
